@@ -1,0 +1,630 @@
+<!doctype html>
+<html lang="en">
+
+	<head>
+		<meta charset="utf-8">
+
+		<title>Ember.js</title>
+
+		<meta name="description" content="A framework for building Single Page Apps">
+		<meta name="author" content="Raphaël Rougeron">
+
+		<meta name="apple-mobile-web-app-capable" content="yes" />
+		<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+
+		<link rel="stylesheet" href="css/reveal.css">
+		<link rel="stylesheet" href="css/theme/default.css" id="theme">
+
+		<!-- For syntax highlighting -->
+		<link rel="stylesheet" href="lib/css/zenburn.css">
+
+		<!-- If the query includes 'print-pdf', use the PDF print sheet -->
+		<script>
+			document.write( '<link rel="stylesheet" href="css/print/' + ( window.location.search.match( /print-pdf/gi ) ? 'pdf' : 'paper' ) + '.css" type="text/css" media="print">' );
+		</script>
+
+		<!--[if lt IE 9]>
+		<script src="lib/js/html5shiv.js"></script>
+		<![endif]-->
+	</head>
+
+	<body>
+
+		<div class="reveal">
+
+			<!-- Any section element inside of this container is displayed as a slide -->
+			<div class="slides">
+
+				<section>
+					<h1>Ember.js</h1>
+					<h3></h3>
+					<p>
+						<small>Raphaël Rougeron / <a href="http://twitter.com/goldoraf">@goldoraf</a></small>
+					</p>
+				</section>
+
+				<section>
+					<h2>Mais qu'est-ce ?</h2>
+					<p>
+						ember.js est un framework MVC pour le développement de Single Page Apps, né des cendres de Sproutcore...
+					</p>
+					<ul style="font-size: 0.8em">
+						<li>Version stable : 0.9.8.1</li>
+						<li>Dernière version : 1.0.0-pre2</li>
+					</ul>
+
+					<aside class="notes">
+						Les principaux core devs (Yehuda Katz, Tom Dale, Peter Wagenet sont des anciens de la team Sproutcore et/ou iCloud). Les principes d'Ember sont fortement inspirés de Cocoa.
+					</aside>
+				</section>
+
+				<section>
+					<h2>Qui l'utilise ?</h2>
+					<table style="border:none; width: 100%">
+						<tr>
+							<td><img src="images/zendesk.png" /></td>
+							<td><img src="images/groupon.png" /></td>
+							<td><img src="images/yapp.png" /></td>
+						</tr>
+						<tr>
+							<td><img src="images/capitainetrain.png" /></td>
+							<td><img src="images/tilde.png" /></td>
+							<td><img src="images/viareport.png" /></td>
+						</tr>
+					</table>
+				</section>
+
+				<section>
+					<h2>Modèle objet</h2>
+					<pre><code class="javascript" contenteditable>
+App.Todo = Ember.Object.extend({
+    title: null,
+    completed: false,
+
+    complete: function() {
+        this.set('completed', true);
+    }
+});
+
+var todo = App.Todo.create({
+    title: 'Acheter du pain'
+});
+console.log(todo.get('title'));
+todo.set('completed', true);
+					</code></pre>
+				</section>
+
+				<section>
+					<h2>Héritage</h2>
+					<pre><code class="javascript" contenteditable>
+App.Task = App.Todo.extend({
+    dueAt: null,
+    completedAt: null,
+
+    complete: function() {
+        <strong>this._super();</strong>
+        this.set('completedAt', new Date());
+    }
+});
+					</code></pre>
+				</section>
+
+				<section>
+					<h2>Réouverture d'instances</h2>
+					<pre><code class="javascript" contenteditable>
+App.Task.reopen({
+    assignee: null
+});
+					</code></pre>
+					<h2>Réouverture de "classes"</h2>
+					<pre><code class="javascript" contenteditable>
+App.Task.reopenClass({
+    instantiate: function() {
+        return this.create();
+    }
+});
+					</code></pre>
+				</section>
+
+				<section>
+					<h2>Computed properties</h2>
+					<pre><code class="javascript" contenteditable>
+App.Contact = Ember.Object.extend({
+    firstname: null,
+    lastname: null,
+    email: null,
+
+    fullname: function() {
+        return this.get('firstname') + ' ' + this.get('lastname');
+    }.property('firstname', 'lastname')
+});
+					</code></pre>
+				</section>
+
+				<section>
+					<h2>Computed properties</h2>
+					<h3>Getters / setters</h3>
+					<pre><code class="javascript" contenteditable>
+App.Contact.reopen({
+    fullname: function(key, value) {
+        // getter
+        if (arguments.length === 1) {
+            return this.get('firstname') 
+            	+ ' ' + this.get('lastname');
+        // setter
+        } else {
+            var name = value.split(" ");
+            this.set('firstName', name[0]);
+            this.set('lastName', name[1]);
+        }
+    }.property('firstname', 'lastname')
+});
+					</code></pre>
+				</section>
+
+				<section>
+					<h2>Bindings</h2>
+					<pre><code class="javascript" contenteditable>
+App.Contact = Ember.Object.extend({
+    firstname: null,
+    lastname: null,
+    email: null,
+
+    addressbookBinding: 'App.PersonalAddressbook.name'
+});
+
+var c = App.Contact.create({
+    firstname: 'John',
+    lastname: 'Doe'
+});
+console.log(c.get('addressbook')); // -> 'My contacts'
+					</code></pre>
+				</section>
+
+				<section>
+					<h2>Observers</h2>
+					<pre><code class="javascript" contenteditable>
+App.Todo = Ember.Object.extend({
+    title: null,
+    completed: false,
+
+    todoChanged: function() {
+        App.store.save(this);
+    }.observes('title', 'completed')
+});
+					</code></pre>
+				</section>
+
+				<section>
+					<h2>Observers</h2>
+					<h3>Syntaxes alternatives</h3>
+					<pre><code class="javascript" contenteditable>
+App.Todo = Ember.Object.extend({
+    title: null,
+    completed: false,
+    todoChanged: Ember.observer(function() {
+        App.store.save(this);
+    }, 'title', 'completed')
+});
+					</code></pre>
+					<pre><code class="javascript" contenteditable>
+var todo = App.Todo.create();
+todo.addObserver('title', 'completed', function() {
+    App.store.save(this);
+});
+					</code></pre>
+				</section>
+
+				<section>
+					<h2>Observers sur les arrays</h2>
+					<pre><code class="javascript" contenteditable>
+App.TodoList = Ember.Object.extend({
+    todos: [],
+
+    completed: function() {
+        return this.get('todos').filterProperty('completed', true);
+    }.property('todos.@each.completed')
+});
+					</code></pre>
+				</section>
+
+				<section>
+					<h2>Enumerables</h2>
+					<pre><code class="javascript" contenteditable>
+var todos = [
+    App.Todo.create({ title: 'Acheter le pain' }),
+    App.Todo.create({ title: 'Finir mes slides' }),
+    App.Todo.create({ title: 'Jouer de la guitare' })
+];
+
+todos.forEach(function(item, index, self) {
+    item.set('completed', true);
+});
+
+todos.invoke('complete');
+					</code></pre>
+				</section>
+
+				<section>
+					<h2>Enumerables #2</h2>
+					<pre><code class="javascript" contenteditable>
+var titles = todos.map(function(item) {
+    return item.get('title');
+});
+
+var titles = todos.mapProperty('title');
+					</code></pre>
+					<pre><code class="javascript" contenteditable>
+var completed = todos.filter(function(item) {
+    return item.get('completed') === true;
+});
+
+var completed = todos.filterProperty('completed', true);
+					</code></pre>
+				</section>
+
+				<section>
+					<h2>Enumerables #3</h2>
+					<pre><code class="javascript" contenteditable>
+var allCompleted = todos.every(function(item) {
+    return item.get('completed') === true;
+});
+
+var allCompleted = todos.everyProperty('completed', true);
+					</code></pre>
+					<pre><code class="javascript" contenteditable>
+var someCompleted = todos.some(function(item) {
+    return item.get('completed') === true;
+});
+
+var someCompleted = todos.someProperty('completed', true);
+					</code></pre>
+				</section>
+
+				<section>
+					<h2>Handlebars</h2>
+					<pre><code class="handlebars" contenteditable>
+    &lt;span class="title"&gt;{{task.title}}&lt;/span&gt;
+    &lt;a href="#" class="assignee"&gt;{{task.assignee.name}}&lt;/a&gt;
+    {{#if task.dueAt}}
+        Due at {{format_date task.dueAt}}
+    {{/if}}
+					</code></pre>
+				</section>
+
+				<section>
+					<h2>Views et templates</h2>
+					<pre><code class="handlebars" contenteditable>
+&lt;script type="text/x-handlebars" data-template-name="hi"&gt;
+    Hi, {{name}}
+&lt;/script&gt;
+					</code></pre>
+					<pre><code class="javascript" contenteditable>
+var view = Ember.View.create({
+    templateName: 'hi',
+    name: 'Bob'
+});
+
+view.appendTo('#container');
+					</code></pre>
+				</section>
+
+				<section>
+					<h2>Templates et bindings</h2>
+					<pre><code contenteditable>
+Hi, {{name}}
+					</code></pre>
+					<pre><code contenteditable>
+Hi,
+&lt;script id="metamorph-0-start" type="text/x-placeholder"&gt;&lt;/script&gt;
+Bob
+&lt;script id="metamorph-1-start" type="text/x-placeholder"&gt;&lt;/script&gt;
+					</code></pre>
+					<pre><code contenteditable>
+Hi, {{unbound name}}
+					</code></pre>
+					<pre><code contenteditable>
+Hi, Bob
+					</code></pre>
+				</section>
+
+				<section>
+					<h2>Helpers Handlebars</h2>
+					<h3 style="text-transform: none">{{bindAttr}}</h3>
+					<pre><code class="javascript" contenteditable>
+App.NoticeView = Ember.View.create({
+    specificCSSClass: 'uber-notice-ui',
+    isError: true
+});
+					</code></pre>
+					<pre><code class="handlebars" contenteditable>
+&lt;div {{bindAttr class="specificCSSClass isError"}}&gt;
+  Lorem ipsum
+&lt;/div&gt;
+
+=> &lt;div class="uber-notice-ui is-error"&gt;Lorem ipsum&lt;/div&gt;
+					</code></pre>
+				</section>
+
+				<section>
+					<h2>Helpers Handlebars</h2>
+					<h3 style="text-transform: none">{{bindAttr}}</h3>
+					<pre><code contenteditable>
+&lt;div {{bindAttr class="isError:error:info"}}&gt;
+  Lorem ipsum
+&lt;/div&gt;
+					</code></pre>
+					<pre><code contenteditable>
+&lt;div {{bindAttr class="isError::error"}}&gt;
+  Lorem ipsum
+&lt;/div&gt;
+					</code></pre>
+				</section>
+
+				<section>
+					<h2>Helpers Handlebars</h2>
+					<h3 style="text-transform: none">{{view}}</h3>
+					<pre class="small"><code class="javascript" contenteditable>
+App.ContactView = Ember.View.extend({
+    templateName: 'contact',
+    contact: App.Contact.create({
+        firstname: 'John', lastname: 'Doe',
+        email: 'jdoe@zz.com'
+    })
+});
+
+App.ContactInfoView = Ember.View.extend({
+    templateName: 'info'
+});
+					</code></pre>
+					<pre class="small"><code class="handlebars" contenteditable>
+&lt;script type="text/x-handlebars" data-template-name="contact"&gt;
+    Name: {{contact.firstname}} {{contact.lastname}}
+    {{view App.ContactInfoView contactBinding="contact"}}
+&lt;/script&gt;
+
+&lt;script type="text/x-handlebars" data-template-name="info"&gt;
+    Email: {{contact.email}}
+&lt;/script&gt;
+					</code></pre>
+				</section>
+
+				<section>
+					<h2>Helpers Handlebars</h2>
+					<h3 style="text-transform: none">{{view}}</h3>
+					<pre><code contenteditable>
+&lt;script type="text/x-handlebars" data-template-name="contact"&gt;
+    Name: {{contact.firstname}} {{contact.lastname}}
+    <strong>{{#view App.ContactInfoView contactBinding="contact"}}
+    	Email: {{contact.email}}
+    {{/view}}</strong>
+&lt;/script&gt;
+					</code></pre>
+				</section>
+
+				<section>
+					<h2>Helpers Handlebars</h2>
+					<h3 style="text-transform: none">{{action}}</h3>
+					<pre class="small"><code class="javascript" contenteditable>
+App.TodoView = Ember.View.extend({
+    templateName: 'todo-view',
+    todo: null,
+    isEditing: false,
+
+    edit: function(event) {
+        this.set('isEditing', true);
+    }
+});
+					</code></pre>
+					<pre class="small"><code contenteditable>
+{{view Ember.Checkbox checkedBinding="todo.completed"}}
+{{#if isEditing}}
+    {{view Ember.TextField valueBinding="todo.title"}}
+{{else}}
+    &lt;span <strong>{{action "edit" on="click" target="parentView"}}</strong>&gt;{{todo.title}}&lt;/span&gt;
+{{/if}}
+					</code></pre>
+				</section>
+
+				<section>
+					<h2>Le MVC dans Ember</h2>
+					<a class="image" href="http://emberjs.com/" target="_blank">
+						<img width="468" height="450" src="images/embermvc.png" alt="MVC">
+					</a>
+				</section>
+
+				<section>
+					<h2>Controllers</h2>
+					<pre><code class="javascript" contenteditable>
+App.todosController = Ember.ArrayController.extend({
+    remaining: function() {
+        return this.filterProperty('completed', false).get('length');
+    }.property('@each.completed')
+});
+
+$.get('todos.json', function(data) {
+    App.todosController.set('content', data);
+});
+					</code></pre>
+					<pre><code contenteditable>
+{{#each App.todosController as todo}}
+    {{view App.TodoView todoBinding="todo"}}
+{{/each}}
+Remaining: {{App.todosController.remaining}}
+					</code></pre>
+				</section>
+
+				<section>
+					<h2>Models</h2>
+					<h3>Ember-data</h3>
+					<pre class="small"><code class="javascript" contenteditable>
+App.Todo = DS.Model.extend({
+    title: DS.attr('string'),
+    completed: DS.attr('boolean'),
+    owner: DS.belongsTo('App.User')
+});
+
+App.User = DS.Model.extend({
+    fullname: DS.attr('string'),
+    todos: DS.hasMany('App.Todo')
+});
+
+App.store = DS.Store.create({
+    adapter: DS.RESTAdapter.create()
+});
+					</code></pre>
+					<pre><code class="javascript" contenteditable>
+var todos = App.store.findAll(App.Todo);
+// -> GET /todos
+					</code></pre>
+				</section>
+
+				<section>
+					<h2>Router</h2>
+					<pre class="small"><code class="javascript" contenteditable>
+window.App = Ember.Application.create({
+    ApplicationView = Ember.View.extend({
+        templateName: 'application'
+    }),
+    ApplicationController = Ember.Controller.extend({
+        title: 'Todo list'
+    }),
+    Router: Ember.Router.extend({
+        root: Ember.Route.extend({
+            index: Ember.Route.extend({
+                route: '/'
+            })
+        })
+    })
+});
+					</code></pre>
+					<pre class="small"><code class="handlebars" contenteditable>
+&lt;script type="text/x-handlebars" data-template-name="application"&gt;
+    &lt;h1&gt;{{title}}&lt;/h1&gt;
+&lt;/script&gt;
+					</code></pre>
+				</section>
+
+				<section>
+					<h2>Router et outlets</h2>
+					<pre class="small"><code class="javascript" contenteditable>
+window.App = Ember.Application.create({
+    ...
+    store = DS.Store.create(),
+    Router: Ember.Router.extend({
+        root: Ember.Route.extend({
+            index: Ember.Route.extend({
+                route: '/',
+                connectOutlets: function(router, context) {
+                    router.get('applicationController').connectOutlet('todos', store.findAll(App.Todo));
+                }
+            })
+        })
+    })
+});
+					</code></pre>
+					<pre class="small"><code contenteditable>
+&lt;script type="text/x-handlebars" data-template-name="application"&gt;
+    &lt;h1&gt;{{title}}&lt;/h1&gt;
+    &lt;div id="content"&gt;{{outlet}}&lt;/div&gt;
+&lt;/script&gt;
+					</code></pre>
+				</section>
+
+				<section>
+					<h2>Router #2</h2>
+					<pre class="small"><code class="full javascript" contenteditable>
+window.App = Ember.Application.create({
+    ...
+    Router: Ember.Router.extend({
+        root: Ember.Route.extend({
+            index: Ember.Route.extend({
+                route: '/',
+                ...
+            }),
+            completed: Ember.Route.extend({
+                route: '/completed',
+                connectOutlets: function(router, context) {
+                    router.get('applicationController').connectOutlet('todos', 
+                        store.filter(App.Todo, function(todo) {
+                            return item.get('completed') === true;
+                        })
+                    );
+                }
+            })
+        })
+    })
+});
+					</code></pre>
+				</section>
+
+				<section>
+					<h2>Router et transitions</h2>
+					<pre class="small"><code class="full javascript" contenteditable>
+window.App = Ember.Application.create({
+    ...
+    Router: Ember.Router.extend({
+        root: Ember.Route.extend({
+            gotoCompleted: Ember.Route.transitionTo('root.completed'),
+            index: Ember.Route.extend({
+                route: '/',
+                ...
+            }),
+            completed: Ember.Route.extend({
+                route: '/completed',
+                ...
+            })
+        })
+    })
+});
+					</code></pre>
+					<pre class="small"><code contenteditable>
+&lt;script type="text/x-handlebars" data-template-name="application"&gt;
+    &lt;h1&gt;{{title}}&lt;/h1&gt;
+    &lt;a {{action gotoCompleted}}&gt;View completed&lt;/a&gt;
+    &lt;div id="content"&gt;{{outlet}}&lt;/div&gt;
+&lt;/script&gt;
+					</code></pre>
+				</section>
+
+				<section>
+					<h1>CONCLUSION</h1>
+					<img src="images/chien.gif"/>
+				</section>
+
+			</div>
+
+		</div>
+
+		<script src="lib/js/head.min.js"></script>
+		<script src="js/reveal.min.js"></script>
+
+		<script>
+
+			// Full list of configuration options available here:
+			// https://github.com/hakimel/reveal.js#configuration
+			Reveal.initialize({
+				controls: true,
+				progress: true,
+				history: true,
+				center: true,
+
+				theme: Reveal.getQueryHash().theme, // available themes are in /css/theme
+				transition: Reveal.getQueryHash().transition || 'default', // default/cube/page/concave/zoom/linear/none
+
+				// Optional libraries used to extend on reveal.js
+				dependencies: [
+					{ src: 'lib/js/classList.js', condition: function() { return !document.body.classList; } },
+					{ src: 'plugin/markdown/showdown.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+					{ src: 'plugin/markdown/markdown.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+					{ src: 'plugin/highlight/highlight.js', async: true, callback: function() { hljs.initHighlightingOnLoad(); } },
+					{ src: 'plugin/zoom-js/zoom.js', async: true, condition: function() { return !!document.body.classList; } },
+					{ src: 'plugin/notes/notes.js', async: true, condition: function() { return !!document.body.classList; } }
+					// { src: 'plugin/remotes/remotes.js', async: true, condition: function() { return !!document.body.classList; } }
+				]
+			});
+
+		</script>
+
+	</body>
+</html>

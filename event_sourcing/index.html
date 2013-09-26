@@ -1,0 +1,309 @@
+<!doctype html>
+<html lang="en">
+
+	<head>
+		<meta charset="utf-8">
+
+		<title>Event Sourcing</title>
+
+		<meta name="description" content="Event Sourcing">
+		<meta name="author" content="Raphaël Rougeron">
+
+		<meta name="apple-mobile-web-app-capable" content="yes" />
+		<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+		<link rel="stylesheet" href="css/reveal.min.css">
+		<link rel="stylesheet" href="css/theme/default.css" id="theme">
+
+		<!-- For syntax highlighting -->
+		<link rel="stylesheet" href="lib/css/zenburn.css">
+
+		<!-- If the query includes 'print-pdf', use the PDF print sheet -->
+		<script>
+			document.write( '<link rel="stylesheet" href="css/print/' + ( window.location.search.match( /print-pdf/gi ) ? 'pdf' : 'paper' ) + '.css" type="text/css" media="print">' );
+		</script>
+
+		<!--[if lt IE 9]>
+		<script src="lib/js/html5shiv.js"></script>
+		<![endif]-->
+	</head>
+
+	<body>
+
+		<div class="reveal">
+
+			<!-- Any section element inside of this container is displayed as a slide -->
+			<div class="slides">
+
+				<section>
+                    <h1>Event Sourcing</h1>
+                     
+                    <p>
+                        <small>Raphaël Rougeron / <a href="http://twitter.com/goldoraf">@goldoraf</a></small>
+                    </p>
+                </section>
+
+                <section>
+                    <h2>Mutable State</h2>
+                    <ul>
+                        <li><strong>Les ORMs</strong></li>
+                        <ul>
+                            <li>détectent les changements d'états du modèle pour les persister en BD</li>
+                            <li>et c'est... lent !
+                        </ul>
+                        <li><strong>Les frameworks type Ember, Angular...</strong></li>
+                        <ul>
+                            <li>observent les changements d'états du modèle pour rafraichir les vues</li>
+                            <li>et c'est... lent !
+                        </ul>
+                    </ul>
+                </section>
+
+                <section>
+                    <h2>Et en plus...</h2>
+                    <h3>...on perd de la donnée !</h3>
+                </section>
+
+                <section>
+                    <h2>L'utilisateur crée une card</h2>
+                    <pre><code class="javascript" contenteditable>
+{
+	label: 'ETQ dev, je veux roxer du poney',
+	status: 'TODO',
+	tasks: []
+}
+                    </code></pre>
+                </section>
+                <section>
+                    <h2>L'utilisateur ajoute une tâche</h2>
+                    <pre><code class="javascript" contenteditable>
+{
+	label: 'ETQ dev, je veux roxer du poney',
+	status: 'TODO',
+	tasks: [
+	    { label: 'roxer du poney', checked: false }
+	]
+}
+                    </code></pre>
+                </section>
+                <section>
+                    <h2>L'utilisateur valide une tâche</h2>
+                    <pre><code class="javascript" contenteditable>
+{
+	label: 'ETQ dev, je veux roxer du poney',
+	status: 'TODO',
+	tasks: [
+	    { label: 'roxer du poney', checked: true }
+	]
+}
+                    </code></pre>
+                </section>
+                <section>
+                    <h2>L'utilisateur passe la card en done</h2>
+                    <pre><code class="javascript" contenteditable>
+{
+	label: 'ETQ dev, je veux roxer du poney',
+	status: 'DONE',
+	tasks: [
+	    { label: 'roxer du poney', checked: true }
+	]
+}
+                    </code></pre>
+                </section>
+
+                <section>
+                    <h2>Et là Elyes arrive...</h2>
+                    <blockquote>
+						&ldquo;Dites les gars, les clients voudraient connaitre le temps moyen pour qu'une card passe en done. C'est très simple, non ?&rdquo;
+					</blockquote>
+                </section>
+
+                <section>
+                    <h2>Fabien</h2>
+                    <img src="images/lebowski.gif" />
+                </section>
+
+                <section>
+                    <h2>Olivier</h2>
+                    <img src="images/coach.gif" />
+                </section>
+
+                <section>
+                    <h2>Emmanuel</h2>
+                    <img src="images/gloups.gif" />
+                </section>
+
+                <section>
+                    <h2>Benoit</h2>
+                    <img src="images/benoit.gif" />
+                </section>
+
+                <section>
+                    <h2>Raph</h2>
+                    <img src="images/raph.gif" />
+                </section>
+
+                <section>
+                    <h2>Christophe</h2>
+                    <img src="images/christophe.gif" />
+                </section>
+
+                <section>
+                    <h2>Nicolas</h2>
+                    <img src="images/nico.gif" />
+                </section>
+
+                <section>
+                    <h2>Blandine</h2>
+                    <img src="images/blandine.gif" />
+                </section>
+
+                <section>
+                    <h2>Enter Event Sourcing</h2>
+                    <img src="images/event_sourcing.png" />
+                    <ul>
+                    	<li>Une action entraine l'émission d'un event</li>
+                    	<li>Seuls les events sont persistés</li>
+                    	<li>L'état d'un modèle est reconstitué en rejouant les events</li>
+                    	<li>La requête d'Elyes n'est qu'une projection spécifique de nos events</li>
+                    </ul>
+                </section>
+
+                <section>
+                    <h2>Petit point perfs</h2>
+                    <img src="images/event_sourcing2.png" />
+                    <ul>
+                    	<li>FP : the final state is a left-fold function of the previous states</li>
+                    	<li>En gros, c'est le Reduce du Map/Reduce</li>
+                    	<li>Bien codé, c'est non seulement rapide mais surtout distribuable et donc scalable !</li>
+                    	<li>Et puis il y a le snapshotting...</li>
+                    </ul>
+                </section>
+
+                <section>
+                    <h2>CQRS / ES</h2>
+                    <img src="images/CQRS_ES.png" />
+                </section>
+
+                <section>
+                    <h2>Archi client/serveur</h2>
+                    <img src="images/front_back.png" />
+                </section>
+
+                <section>
+                    <h2>Demo time !</h2>
+                </section>
+
+                <section>
+                    <h2>Avantages</h2>
+                    <ul>
+                    	<li>Simplicité</li>
+                    	<ul>
+                    		<li>Events = objets simples</li>
+                    		<li>Pas d'object-relational impedance mismatch</li>
+                    		<li>Code plus simple et expressif, moins de layering nécessaire</li>
+                    	</ul>
+                    	<li>Performance</li>
+                    	<ul>
+                    		<li>La persistence est une opération append-only</li>
+                    		<li>Scalabilité</li>
+                    	</ul>
+                    	<li>Flexibilité et auditabilité</li>
+                    	<ul>
+                    		<li>On dispose de tout l'historique du système</li>
+                    		<li>On peut répondre à toute question du business</li>
+                    	</ul>
+                    </ul>
+                </section>
+
+                <section>
+                    <h2>Avantages</h2>
+                    <ul>
+                    	<li>Event-oriented architecture</li>
+                    	<ul>
+                    		<li>Systèmes (très) low-coupled</li>
+                    		<li>Redondance facile à mettre en place (SLA)</li>
+                    		<li>Intégration aisée avec d'autres systèmes (cf EIP)</li>
+                    	</ul>
+                    	
+                    </ul>
+                </section>
+
+                <section>
+                    <h2>Points d'attention</h2>
+                    <ul>
+                    	<li>Performance</li>
+                    	<ul>
+                    		<li>La stratégie de snapshotting est cruciale</li>
+                    		<li>Consistence éventuelle</li>
+                    		<li>Coût du stockage ?</li>
+                    	</ul>
+                    	<li>Versioning</li>
+                    	<ul>
+                    		<li>Le système doit savoir gérer des events et aggregates de versions différentes</li>
+                    	</ul>
+                    	<li>Requêtage</li>
+                    	<ul>
+                    		<li>On ne peut pas interroger directement ses données comme avec une BD relationnelle</li>
+                    	</ul>
+                    	<li>Modélisation</li>
+                    	<ul>
+                    		<li>Définir les types d'events est un art à part entière (DDD)</li>
+                    	</ul>
+                    </ul>
+                </section>
+
+                <section>
+                    <h2>(Autres) Avantages</h2>
+                    <ul>
+                    	<li>Offline ?...................................Done !</li>
+                    	<li>Synchro ?...................................LOL !</li>
+                    	<li>Undo ?......................................Easy !</li>
+                    	<li>Versioning ?................................Check !</li>
+                    	<li>Activité ?..................................Muhahaha !</li>
+                    </ul>
+                </section>
+
+                <section>
+                    <h2>The end</h2>
+                </section>
+
+			</div>
+
+		</div>
+
+		<script src="lib/js/head.min.js"></script>
+		<script src="js/reveal.min.js"></script>
+
+		<script>
+
+			// Full list of configuration options available here:
+			// https://github.com/hakimel/reveal.js#configuration
+			Reveal.initialize({
+				controls: true,
+				progress: true,
+				history: true,
+				center: true,
+
+				theme: Reveal.getQueryHash().theme, // available themes are in /css/theme
+				transition: Reveal.getQueryHash().transition || 'default', // default/cube/page/concave/zoom/linear/fade/none
+
+				// Optional libraries used to extend on reveal.js
+				dependencies: [
+					{ src: 'lib/js/classList.js', condition: function() { return !document.body.classList; } },
+					{ src: 'plugin/markdown/marked.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+					{ src: 'plugin/markdown/markdown.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+					{ src: 'plugin/highlight/highlight.js', async: true, callback: function() { hljs.initHighlightingOnLoad(); } },
+					{ src: 'plugin/zoom-js/zoom.js', async: true, condition: function() { return !!document.body.classList; } },
+					{ src: 'plugin/notes/notes.js', async: true, condition: function() { return !!document.body.classList; } }
+					// { src: 'plugin/search/search.js', async: true, condition: function() { return !!document.body.classList; } }
+					// { src: 'plugin/remotes/remotes.js', async: true, condition: function() { return !!document.body.classList; } }
+				]
+			});
+
+		</script>
+
+	</body>
+</html>

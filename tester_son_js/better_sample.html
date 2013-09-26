@@ -1,0 +1,64 @@
+<!doctype html>
+<html lang="en">
+
+    <head>
+        <meta charset="utf-8">
+
+        <title>Sample app</title>
+        <script src="http://code.jquery.com/jquery-1.9.1.min.js"></script>
+    </head>
+
+    <body>
+        <h1>(Better) sample app</h1>
+        <form id="search-form">
+            <label for="search">Search Twitter for:</label>
+            <input type="text" name="search" />
+            <input type="submit" value="Go !" />
+        </form>
+        <ul id="results">
+
+        </ul>
+    </body>
+
+    <script>
+        window.App = {};
+
+        App.ResultsView = function(selector) {
+            this.elt = $(selector);
+        };
+
+        App.ResultsView.prototype.addTweet = function(text) {
+            this.elt.append('<li>' + text + '</li>');
+        };
+
+        App.ResultsView.prototype.reset = function() {
+            this.elt.empty();
+        };
+
+        App.Twitter = {
+            search: function(term, callback) {
+                $.ajax('http://search.twitter.com/search.json', {
+                    data: { q: term },
+                    dataType: 'jsonp',
+                    success: callback
+                });
+            }
+        }
+
+        var results = new App.ResultsView('#results');
+
+        $('#search-form').on('submit', function(e) {
+            e.preventDefault();
+
+            var term = $(this).find('input[name="search"]').val();
+
+            App.Twitter.search(term, function(data) {
+                results.reset();
+                data.results.forEach(function(tweet) {
+                    results.addTweet(tweet.text);
+                });
+            });
+        });
+    </script>
+
+</html>
