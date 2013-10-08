@@ -1,0 +1,72 @@
+<polymer-element name="browser-compat"
+                 attributes="ie ff cr sa op">
+    <template>
+        <style>
+            table.browser-compat {
+                border-collapse: collapse;
+                width: 100%;
+            }
+
+            table.browser-compat td {
+                border: 2px solid white;
+                text-align: center;
+                width: 160px;
+                height: 164px;
+                vertical-align: middle;
+                font-size: 120%;
+            }
+
+            table.browser-compat img {
+                border: none;
+                background: none;
+                box-shadow: none;
+            }
+
+            table.browser-compat td.green {
+                background: #12B419;
+            }
+            table.browser-compat td.yellow {
+                color: black;
+                background: #F6F709;
+            }
+            table.browser-compat td.red {
+                background: #B41212;
+            }
+        </style>
+
+        <table class="browser-compat">
+            <tr>
+                <td><img src="images/ie.png" /></td>
+                <td><img src="images/firefox.png" /></td>
+                <td><img src="images/chrome.png" /></td>
+                <td><img src="images/safari.png" /></td>
+                <td><img src="images/opera.png" /></td>
+            </tr>
+            <tr>
+                <td class="{{ie_class}}">>= {{ie}}</td>
+                <td class="green">>= {{ff}}</td>
+                <td class="green">>= {{cr}}</td>
+                <td class="green">>= {{sa}}</td>
+                <td class="green">>= {{op}}</td>
+            </tr>
+        </table>
+    </template>
+
+    <script>
+        Polymer('browser-compat', {
+            created: function() {
+                switch(parseInt(this.ie)) {
+                    case 10:
+                        this.ie_class = 'red';
+                        break;
+                    case 9:
+                        this.ie_class = 'yellow';
+                        break;
+                    default:
+                        this.ie_class = 'green';
+                        break;
+                }
+            }
+        });
+    </script>
+</polymer-element>

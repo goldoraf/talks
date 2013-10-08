@@ -16,6 +16,7 @@
 
 		<link rel="stylesheet" href="css/reveal.min.css">
 		<link rel="stylesheet" href="css/theme/default.css" id="theme">
+        <link rel="stylesheet" href="css/custom.css">
 
 		<!-- For syntax highlighting -->
 		<link rel="stylesheet" href="lib/css/zenburn.css">
@@ -28,6 +29,9 @@
 		<!--[if lt IE 9]>
 		<script src="lib/js/html5shiv.js"></script>
 		<![endif]-->
+
+        <script src="js/polymer-v0.0.20131003.min.js"></script>
+        <link rel="import" href="browser-compat-component.html">
 	</head>
 
 	<body>
@@ -50,7 +54,7 @@
                     <img src="images/meh.jpg" />
 
                     <aside class="notes">
-                        Firefox vient de sortir, il s'appelle encore Phoenix. IE6 possède 97% des parts de marché. Rails, Django, Symfony n'existent pas. Le terme Ajax n'est pas encore utilisé (2005). C'est l'époque du DHTML et des scripts copiés/collés, du JS spécifique IE6, ActiveX et autres...
+                        Firefox vient de sortir, il s'appelle encore Phoenix. IE6 possède 97% des parts de marché. Rails, Django, Symfony n'existent pas. Le terme Ajax n'est pas encore utilisé (2005). C'est l'époque du DHTML et des scripts copiés/collés, du JS spécifique IE6, ActiveX et autres..., de W3schools comme référence (trouver une image via the internet archive ?)
                     </aside>
                 </section>
 
@@ -61,16 +65,576 @@
 
                 <section>
                     <h2>jQuery aujourd'hui</h2>
-                    <ul>
-                        <li>Inclus sur 92,2% des sites utilisant une lib JS</li>
-                        <li>Soit 56,2% des sites web...</li>
-                        <li>version 1.x : 99,6%</li>
-                        <li>Il y a 3 fois plus de sites utilisant jQuery que de sites utilisant Flash...</li>
-                    </ul>
+                    <p style="font-size: 300%">
+                        92,2%
+                    </p>
+                    <aside class="notes">
+                        Inclus sur 92,2% des sites utilisant une lib JS, soit 56,2% des sites web... (version 1.x : 99,6%)
+                        Il y a 3 fois plus de sites utilisant jQuery que de sites utilisant Flash...
+                    </aside>
                 </section>
 
                 <section>
                     <img src="images/job.png" />
+                </section>
+
+                <section>
+                    <img src="images/chien.gif" />
+                </section>
+
+                <section>
+                    <img src="images/velos.jpg" />
+                </section>
+
+                <section>
+                    <img src="images/the_homer.jpg" />
+                </section>
+
+                <section>
+                    <img src="images/microjs.png" />
+                </section>
+
+                <section>
+                    <p>Préciser ici que partir sur la voie du "sans jQuery" nécessite une pratique assidue des tests automatisés...
+                        (Insérer une image de crash test ?)</p>
+                </section>
+
+                <section>
+                    <img src="images/jquery_home.png" />
+                </section>
+
+                <section>
+                    <img src="images/jquery_home_zoom1.png" />
+                </section>
+
+                <section>
+                    <h2>Premier exemple</h2>
+                    <pre class="big"><code class="javascript"data-trim contenteditable>
+$("button.continue").html("Next Step...")
+                    </code></pre>
+                </section>
+
+                <section>
+                    <h2>Document</h2>
+                    <ul>
+                        <li>getElementById</li>
+                        <li>getElementsByTagName</li>
+                        <li class="bigger">getElementsByClassName</li>
+                        <li class="big">querySelector</li>
+                        <li class="big">querySelectorAll</li>
+                    </ul>
+                </section>
+
+                <section>
+                    <h2 class="sensitive">document.querySelector</h2>
+                    <browser-compat
+                        ie="8"
+                        ff="3.5"
+                        cr="1"
+                        sa="3.2"
+                        op="10" />
+                    <aside class="notes">
+                        Cette méthode prend un sélecteur CSS et retourne le premier elt correspondant (ou null). Le support des sélecteurs dépend du support du moteur CSS, donc sous IE8 on est limité aux sélecteurs CSS2.1 et on n'a pas les pseudo-sélecteurs de jQuery (:has, :visible). Mais ça laisse pas mal de possibilités... Et donc cette méthode retourne un objet de type Element, que peut-on faire dessus ? Allons voir sur W3sch... le MDN ;)
+                    </aside>
+                </section>
+
+                <section>
+                    <img src="images/mdn.png" />
+                </section>
+
+                <section>
+                    <img src="images/innerhtml.png" />
+                </section>
+
+                <section>
+                    <pre class="big"><code class="javascript"data-trim contenteditable>
+$("button.continue").html("Next Step...");
+                    </code></pre>
+                    <pre class="big"><code class="javascript"data-trim contenteditable>
+document.querySelector("button.continue")
+        .innerHTML = "Next Step...";
+                    </code></pre>
+                </section>
+
+                <section>
+                    <pre class="big"><code class="javascript"data-trim contenteditable>
+$("button.continue").html("Next Step...");
+                    </code></pre>
+                    <pre class="big"><code class="javascript"data-trim contenteditable>
+document.querySelector("button.continue")
+        .innerHTML = "Next Step...";
+                    </code></pre>
+                    <p>Et que se passe t-il si le sélecteur ne correspond à aucun élément ?</p>
+                    <aside class="notes">
+                        Avec jQuery, il ne se passe rien... Par contre, avec la méthode DOM, on a une erreur ! Si on m'avais donné 1€ à chaque fois que j'ai perdu du temps à comprendre pourquoi mon code ne marchait pas alors que j'avais fait une typo dans mon sélecteur CSS, ma Ferrari serait garée dehors...
+                    </aside>
+                </section>
+
+                <section>
+                    <p class="error">
+Uncaught TypeError: Cannot set property 'innerHTML' of null
+                    </p>
+                </section>
+
+                <section>
+                    <h2>Deuxième exemple</h2>
+                    <pre><code class="javascript"data-trim contenteditable>
+var hiddenBox = $("#banner-message");
+$("#button-container button").on("click", function(event) {
+  hiddenBox.show();
+});
+                    </code></pre>
+                </section>
+
+                <section>
+                    <h2 class="sensitive">addEventListener</h2>
+                    <pre><code class="javascript"data-trim contenteditable>
+var hiddenBox = document.getElementByID("#banner-message");
+document.querySelector("#button-container button")
+        .addEventListener("click", function(event) {
+            hiddenBox.setAttribute("style", "display: block");
+        }, false);
+                    </code></pre>
+                    <aside class="notes">
+                        le false correspond à l'argument 'useCapture', optionnel dans les browsers récents. si on utilise la capture, l'event va être déclenché sur les parents AVANT la cible de l'event ; si non, on fait de l'event bubbling, l'event va être déclenché en premier sur la cible.
+                    </aside>
+                </section>
+
+                <section>
+                    <h2 class="sensitive">addEventListener</h2>
+                    <browser-compat
+                        ie="9"
+                        ff="1"
+                        cr="1"
+                        sa="1"
+                        op="7" />
+                    <aside class="notes">
+                        Effectivement, IE8 (et les précédents) ont leur propres méthodes de gestion des events (attachEvent). Mais la bonne nouvelle, c'est qu'on trouve un polyfill complet sur le MDN, comme pour beaucoup de fonctions d'ailleurs.
+                    </aside>
+                </section>
+
+                <section>
+                    <img src="images/polyfill.png" />
+                </section>
+
+                <section>
+                    Parler ici de Modernizr ?
+                </section>
+
+                <section>
+                    <h2>Troisième exemple</h2>
+                    <pre><code class="javascript" data-trim contenteditable>
+$.ajax({
+  url: "/api/getWeather",
+  data: {
+    zipcode: 97201
+  },
+  success: function(data) {
+    $("#weather-temp").html("<strong>" + data + "</strong> degrees");
+  }
+});
+                    </code></pre>
+                </section>
+
+                <section>
+                    <h2 class="sensitive">XMLHttpRequest</h2>
+                    <pre><code class="javascript" data-trim contenteditable>
+var xhr = new XMLHttpRequest(),
+    data = [],
+    rawData = {
+        zipcode: 97201
+    };
+for (var k in rawData) {
+    data.push(encodeURIComponent(k) 
+              + "=" + encodeURIComponent(rawData[k]));
+}
+xhr.open("GET", "/api/getWeather");
+xhr.onload = function () {
+    document.querySelector("#weather-temp")
+            .innerHTML = "<strong>" + xhr.response 
+                        + "</strong> degrees";
+};
+xhr.send(data.join("&"));
+                    </code></pre>
+                </section>
+
+                <section>
+                    <h2 class="sensitive">XMLHttpRequest et FormData</h2>
+                    <pre><code class="javascript" data-trim contenteditable>
+var xhr = new XMLHttpRequest(),
+    data = new FormData(),
+    rawData = {
+        zipcode: 97201
+    };
+for (var k in rawData) {
+    data.append(k, JSON.stringify(rawData[k]));
+}
+xhr.open("GET", "/api/getWeather");
+xhr.onload = function () {
+    document.querySelector("#weather-temp")
+            .innerHTML = "<strong>" + xhr.response 
+                        + "</strong> degrees";
+};
+xhr.send(data);
+                    </code></pre>
+                </section>
+
+                <section>
+                    <h2 class="sensitive">XMLHttpRequest et FormData</h2>
+                    <pre><code class="javascript" data-trim contenteditable>
+var xhr = new XMLHttpRequest(),
+    data = new FormData(document.querySelector("#zipcode"));
+
+xhr.open("GET", "/api/getWeather");
+xhr.onload = function () {
+    document.querySelector("#weather-temp")
+            .innerHTML = "<strong>" + xhr.response 
+                        + "</strong> degrees";
+};
+xhr.send(data);
+                    </code></pre>
+                </section>
+
+                <section>
+                    <h2 class="sensitive">FormData</h2>
+                    <browser-compat
+                        ie="10"
+                        ff="4"
+                        cr="7"
+                        sa="12"
+                        op="5" />
+                    <aside class="notes">
+                        
+                    </aside>
+                </section>
+
+                <section>
+                    <h2>Callback hell</h2>
+                    <pre><code class="javascript" data-trim contenteditable>
+$('#demo5').animo("rotate", { degrees:90 }, function(e) {
+    e.element.animo( { animation: "flipOutX", keep: true } );
+    $('#demo6').animo("rotate", { degrees:90 }, function(e) {
+
+        e.element.animo( { animation: "flipOutY", keep: true } );
+        $('#demo7').animo("rotate", { degrees:90 }, function(e) {
+
+            e.element.animo( { animation: "flipOutX", keep: true } );
+            $('#demo8').animo("rotate", { degrees:90 }, function(e){
+                e.element.animo( { animation: "flipOutY", keep: true } );
+            });
+        });
+    });
+});
+                    </code></pre>
+                </section>
+
+                <section>
+                    <h2>jQuery deferreds</h2>
+                    <pre><code class="javascript" data-trim contenteditable>
+$.ajax({
+    url: "/api/getWeather",
+    data: {
+        zipcode: 97201
+    }
+})
+.done(function(data) {
+    $("#weather-temp").html("<strong>" + data + "</strong> degrees");
+})
+.fail(function() {
+    alert("error");
+});
+                    </code></pre>
+                </section>
+
+                <section>
+                    <h2>Promises/A+</h2>
+                    <pre><code class="javascript" data-trim contenteditable>
+getTweetsFor("goldoraf", function (err, results) {
+    ...
+});
+                    </code></pre>
+                    <pre><code class="javascript" data-trim contenteditable>
+var promiseForTweets = getTweetsFor("goldoraf");
+promiseForTweets.then(function(results) {
+    ...
+});
+                    </code></pre>
+                    <pre><code class="javascript" data-trim contenteditable>
+then(fulfilledHandler, errorHandler, progressHandler)
+                    </code></pre>
+                </section>
+
+                <section>
+                    <h2>Promises & XHR</h2>
+                    <pre><code class="javascript" data-trim contenteditable>
+function request(type, url, data) {
+    return new Promise(function (resolve, reject) {
+        var xhr = new XMLHttpRequest;
+        xhr.addEventListener("error", reject);
+        xhr.addEventListener("load", resolve);
+        xhr.open("GET", url);
+        xhr.send(null);
+    });
+}
+                    </code></pre>
+                </section>
+
+                <section>
+                    <h2>Résultat final</h2>
+                    <pre><code class="javascript" data-trim contenteditable>
+request("GET", "/api/getWeather", data)
+.then(function(result) {
+    document.querySelector("#weather-temp")
+            .innerHTML = "<strong>" + result 
+                        + "</strong> degrees";
+});
+                    </code></pre>
+                </section>
+
+                <section>
+                    <h2 class="striked">Callback hell</h2>
+                    <h2>Promise heaven</h2>
+                    <pre><code class="javascript" data-trim contenteditable>
+$('#demo5').animo("rotate", { degrees:90 })
+.then(function(e) {
+    e.element.animo({ animation: "flipOutX", keep: true });
+    return $('#demo6').animo("rotate", { degrees:90 });
+})
+.then(function(e) {
+    e.element.animo({ animation: "flipOutY", keep: true });
+    return $('#demo7').animo("rotate", { degrees:90 });
+})
+.then(function(e) {
+    e.element.animo({ animation: "flipOutX", keep: true });
+    return $('#demo8').animo("rotate", { degrees:90 });
+})
+.then(function(e){
+    e.element.animo({ animation: "flipOutY", keep: true });
+});
+                    </code></pre>
+                    <aside class="notes">
+                        En parlant d'animations, jQuery dispose justement d'outils pour cela.
+                    </aside>
+                </section>
+
+                <section>
+                    <h2>Animations</h2>
+                    <pre><code class="javascript" data-trim contenteditable>
+$("#book").animate({
+    left: "+=50"
+}, 5000, function() {
+    // Animation complete.
+});
+                    </code></pre>
+                    <aside class="notes">
+                        Nous les avons tous utilisées, et pu constater qu'elles étaient loin d'être fluides. La raison en est que jQuery pour ses animations utilise les timers, en particulier la fonction setInterval qui permet d'exécuter un callback toutes les x ms. Or, je vous le rappelle, l'event loop d'un navigateur et de façon générale tout le code JS s'exécute dans un seul thread. Un. Seul. La conséquence est que les callbacks des events asynchrones, tels que les events d'UI et les timers, ne sont executés que lorsqu'il n'y a pas d'autre code à exécuter. Il suffit donc que le callback d'une requête Ajax par ex. soit executé au moment où le timer est censé déclencher le callback pour que celui-ci s'exécute en retard, d'où une sensation de lag accentuée par l'absence de synchro avec le rafraichissement des frames par le navigateur. Heureusement, les navigateurs récents nous proposent une solution nous permettant de synchroniser nos animations avec le rafraîchissement de l'écran.
+                    </aside>
+                </section>
+
+                <section>
+                    <h2 class="sensitive">requestAnimationFrame</h2>
+                    <browser-compat
+                        ie="10"
+                        ff="4"
+                        cr="10"
+                        sa="6"
+                        op="15" />
+
+                </section>
+
+                <section>
+                    <h2 class="sensitive">requestAnimationFrame</h2>
+                    <pre><code class="javascript" data-trim contenteditable>
+var start = null,
+    d = document.getElementById("#book");
+
+function step(timestamp) {
+    var progress;
+    if (start === null) start = timestamp;
+    progress = timestamp - start;
+    d.style.left = Math.min(progress/100, 50) + "px";
+    if (progress < 5000) {
+        requestAnimationFrame(step);
+    }
+}
+
+requestAnimationFrame(step);
+                    </code></pre>
+                    <a href="http://www.html5rocks.com/en/tutorials/speed/rendering/">http://www.html5rocks.com/en/tutorials/speed/rendering/</a>
+                    <aside class="notes">
+                         Attention aux vendor-prefix ! requestAnimationFrame indique au navigateur qu'il doit appeller un callback avant le prochain repaint. Ce callback nous permet de mettre à jour l'état de notre animation. Et cela permet donc de rester synchro avec le refresh rate du navigateur, et ainsi d'avoir une animation plus fluide. Sur ce sujet, je vous recommande la lecture de l'article en lien.
+                         Remarque : utiliser la propriété left pour l'animation comme ici dans l'exemple n'est pas optimal, car cela ne permet pas un positionnement "sub-pixelique". Et de manière générale, une animation drivée par JS qui a beaucoup d'autres choses à faire dans une appli web moderne n'est pas optimal. L'idéal serait de laisser le navigateur gérer ce genre de choses, car il a accès au GPU et peut donc optimiser les animations bien mieux que nous. Ce qui me permet d'introduire les animations CSS3. Il y a 2 façons d'en faire : les transitions et les animations.
+                    </aside>
+                </section>
+
+                <section>
+                    <h2>Transitions CSS3</h2>
+                    <table class="demo">
+                        <tr>
+                            <td class="code">
+                                <pre><code class="css" data-trim contenteditable>
+button.foo {
+    font-size: 40px;
+    background: #C9C9C9;
+    
+    transition-property: background;
+    -moz-transition-property: background;
+    -webkit-transition-property: background;
+    -o-transition-property: background;
+    
+    transition-duration: 500ms;
+    -webkit-transition-duration: 500ms;
+}
+button.foo:hover {
+    background: #959595;
+    color: #FFF;
+}
+                                </code></pre>
+                            </td>
+                            <td class="sample">
+                                <style>
+button.foo {
+    font-size: 40px;
+    background: #C9C9C9;
+    
+    transition-property: background;
+    -moz-transition-property: background;
+    -webkit-transition-property: background;
+    -o-transition-property: background;
+    
+    transition-duration: 500ms;
+    -webkit-transition-duration: 500ms;
+}
+button.foo:hover {
+    background: #959595;
+    color: #FFF;
+}
+                                </style>
+                                <button class="foo">Hello</button>
+                            </td>
+                        </tr>
+                    </table>
+                    <aside class="notes">
+                        On a besoin de définir seulement 2 propriétés : transition-property & duration. Attention aux vendor prefixes !
+                    </aside>
+                </section>
+
+                <section>
+                    <h2>Animations CSS3</h2>
+                    <table class="demo">
+                        <tr>
+                            <td class="code">
+                                <pre><code class="css" data-trim contenteditable>
+@keyframes 'my-animation' {
+    0% { background: #C9C9C9; }
+    50% { background: #61BE50; }
+    100% { background: #C9C9C9; }
+}
+button.bar:hover {
+    background: #959595;
+    color: #FFF;
+    
+    animation-name: 'my-animation';
+    animation-duration: 2s;
+    animation-iteration-count: infinite;
+}
+                                </code></pre>
+                            </td>
+                            <td class="sample">
+                                <style>
+@keyframes 'bg-animation' {
+    0% {
+        background: #C9C9C9;
+    }
+    50% {
+        background: #61BE50;
+    }
+    100% {
+        background: #C9C9C9;
+    }
+}
+@-webkit-keyframes 'bg-animation' {
+    0% {
+        background: #C9C9C9;
+    }
+    50% {
+        background: #61BE50;
+    }
+    100% {
+        background: #C9C9C9;
+    }
+}
+button.bar {
+    font-size: 40px;
+    background: #C9C9C9;    
+}
+button.bar:hover {
+    background: #959595;
+    color: #FFF;
+    
+    animation-name: 'bg-animation';
+    animation-duration: 2s;
+    animation-iteration-count: infinite;
+    
+    -webkit-animation-name: 'bg-animation';
+    -webkit-animation-duration: 2s;
+    -webkit-animation-iteration-count: infinite;
+    
+}
+                                </style>
+                                <button class="bar">Hello</button>
+                            </td>
+                        </tr>
+                    </table>
+                    <aside class="notes">
+                        Les animations CSS permettent, elles, de définir les valeurs de différentes propriétés CSS à certains moments de l'animation, d'où la possibilité de créer des anims plus complexes. Cependant, les animations en pur CSS ne peuvent être interrompues et sont difficilement synchronisables. Elles sont donc parfaites pour des effets simples (comme sur un bouton), mais on va avoir besoin de JS pour coordonner différentes animations, et surtout pour détecter la fin d'une animation.
+                    </aside>
+                </section>
+
+                <section>
+                    <h2 class="sensitive">transitionend</h2>
+                    <pre><code class="javascript" data-trim contenteditable>
+function whichTransitionEvent(el){
+    var t,
+        transitions = {
+          'transition':'transitionend',
+          'OTransition':'oTransitionEnd',
+          'MozTransition':'transitionend',
+          'WebkitTransition':'webkitTransitionEnd'
+        }
+
+    for (t in transitions) {
+        if (el.style[t] !== undefined) {
+            return transitions[t];
+        }
+    }
+}
+                    </code></pre>
+                    <aside class="notes">
+                        A cause des vendor-prefixes, nous avons besoin d'une fonction dans ce genre pour déterminer quel event écouter.
+                    </aside>
+                </section>
+
+                <section>
+                    <h2 class="sensitive">transitionend</h2>
+                    <pre><code class="javascript" data-trim contenteditable>
+var transitionEnd = whichTransitionEvent(element);
+element.addEventListener(transitionEnd, function(event) {
+    // on déclenche l'animation suivante !
+    element.classList.add('expand');
+});
+                    </code></pre>
+                    <aside class="notes">
+                        On peut ainsi avec cet event chaîner les animations, et à l'aide d'un soupçon de Promises, construire une librairie dont l'utilisation pourrait ressembler à l'exemple précédent... Je vous recommande chaudement animate.css...
+                        Bien, nous avons parlé de beaucoup de choses, mais il reste un sujet sur lequel je souhaiterais vous entretenir...
+                    </aside>
+                </section>
+                
+                <section>
+                    <img src="images/jquery_ui.png" />
+                    <aside class="notes">
+                        Bla bla bla...
+                    </aside>
                 </section>
 
 			</div>

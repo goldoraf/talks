@@ -1,0 +1,61 @@
+.reveal pre.big {
+    font-size: .85em;
+}
+
+li.bigger {
+    font-size: 120%;
+}
+
+li.big {
+    font-size: 140%;
+}
+
+p.error {
+    color: red;
+    background: white;
+}
+
+h2.sensitive {
+    text-transform: none;
+}
+h2.striked {
+    text-decoration: line-through;
+}
+
+table.browser-compat {
+    border-collapse: collapse;
+    width: 100%;
+}
+
+table.browser-compat td {
+    border: 2px solid white;
+    text-align: center;
+    width: 160px;
+    height: 164px;
+    vertical-align: middle;
+    font-size: 120%;
+}
+
+table.browser-compat img {
+    border: none;
+    background: none;
+    box-shadow: none;
+}
+
+table.browser-compat td.green {
+    background: #12B419;
+}
+table.browser-compat td.yellow {
+    color: black;
+    background: #F6F709;
+}
+table.browser-compat td.red {
+    background: #B41212;
+}
+
+table.demo td.code {
+    width: 100%;
+}
+table.demo td.sample {
+    vertical-align: middle;
+}
