@@ -349,6 +349,43 @@ $('#box').insertAdjacentHTML('afterbegin', '<p>Test</p>');
                 </section>
 
                 <section>
+                    <h2 class="sensitive">DocumentFragment</h2>
+                    <pre><code class="javascript"data-trim contenteditable>
+var tags = ['foo', 'bar', 'baz'],
+    fragment = document.createDocumentFragment();
+
+tags.forEach(function(tag) {
+    var li = document.createElement('li');
+    li.textContent = tag;
+    fragment.appendChild(li);
+});
+
+var ul = document.querySelector('ul');
+ul.appendChild(fragment);
+                    </code></pre>
+                    <aside class="notes">
+                        On a parfois besoin d'ajouter des noeuds dans le DOM pour afficher ce qu'on veut, ce qui n'est pas optimum d'un point de vue perfs car à chaque manip le browser doit repeindre le document. DocumentFragment permet de faire ces manipulations en mémoire avant d'inclure le résultat dans le DOM, c'est donc plus efficace. Et c'est même compatible IE6 !
+                    </aside>
+                </section>
+
+                <section>
+                    <h2>Table API</h2>
+                    <ul>
+                        <li>insertRow()</li>
+                        <li>deleteRow()</li>
+                        <li>insertCell()</li>
+                        <li>deleteCell()</li>
+                        <li>createCaption()</li>
+                        <li>deleteCaption()</li>
+                        <li>createTHead()</li>
+                        <li>...</li>
+                    </ul>
+                    <aside class="notes">
+                        Au passage, saviez-vous qu'il existe une API spécifique pour manipuler les tableaux ? Et ça aussi c'est compatible IE6 !
+                    </aside>
+                </section>
+
+                <section>
                     <h2>Troisième exemple</h2>
                     <pre><code class="javascript" data-trim contenteditable>
 $.ajax({
@@ -758,7 +795,7 @@ element.addEventListener(transitionEnd, function(event) {
                 </section>
                 
                 <section>
-                    <img class="raw" src="images/jquery_ui.png" />
+                    <img class="raw" src="images/jquery_ui2.png" />
                     <aside class="notes">
                         Bla bla bla...
                     </aside>
