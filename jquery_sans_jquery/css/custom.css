@@ -2,6 +2,12 @@
     font-size: .85em;
 }
 
+.reveal section img.raw {
+    border: none;
+    background: none;
+    box-shadow: none;
+}
+
 li.bigger {
     font-size: 120%;
 }

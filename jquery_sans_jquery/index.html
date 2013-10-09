@@ -51,8 +51,7 @@
 
                 <section>
                     <h2>JavaScript il y a 10 ans</h2>
-                    <img src="images/meh.jpg" />
-
+                    <img class="raw" src="images/meh.jpg" />
                     <aside class="notes">
                         Firefox vient de sortir, il s'appelle encore Phoenix. IE6 possède 97% des parts de marché. Rails, Django, Symfony n'existent pas. Le terme Ajax n'est pas encore utilisé (2005). C'est l'époque du DHTML et des scripts copiés/collés, du JS spécifique IE6, ActiveX et autres..., de W3schools comme référence (trouver une image via the internet archive ?)
                     </aside>
@@ -60,7 +59,10 @@
 
                 <section>
                     <h2>2006</h2>
-                    <img src="images/jquery_logo.png" />
+                    <img class="raw" src="images/jquery_logo.png" />
+                    <aside class="notes">
+                        Et puis en janvier 2006 apparait jQuery. Même si d'autres librairies sont arrivées avant, comme Prototype, jQuery a sans doute été le vrai déclencheur du renouveau de JS. Avec jQuery, manipuler le DOM ou faire des requêtes Ajax devient facile. jQuery abstrait parfaitement les différences d'impl. des navigateurs.
+                    </aside>
                 </section>
 
                 <section>
@@ -71,32 +73,81 @@
                     <aside class="notes">
                         Inclus sur 92,2% des sites utilisant une lib JS, soit 56,2% des sites web... (version 1.x : 99,6%)
                         Il y a 3 fois plus de sites utilisant jQuery que de sites utilisant Flash...
+                        C'est remarquable... Et un peu inquiétant : on a le sentiment qu'inclure Jquery est devenu un réflexe, qu'on n'y pense même plus. Enormément de libs et même de frameworks dépendent de jQuery, parfois pour pas grand chose, et alors que jQuery peut être lourd sur, par exemple, un smartphone dont les perfs des navigateurs sont bien inférieures pour des raisons notamment d'architecture CPU. Et on arrive à ce genre de choses...
                     </aside>
                 </section>
 
                 <section>
                     <img src="images/job.png" />
+                    <aside class="notes">
+                         utiliser jQuery, ce n’est pas apprendre/connaitre le JS et les APIs standards ; or JS est déjà partout, et ce n’est pas prêt de changer : si vous êtes développeur web, vous devez connaitre JS car on peut dire qu’il est là pour au moins 10 ans (certes, il y a les initiatives Dart, Typescript, langages qui compilent en JS, qui sont là car pour continuer à améliorer les perfs il faut un langage typé statiquement. Mais tant qu’un standard n’a pas émergé, nous continuerons à utiliser JS). 
+                    </aside>
                 </section>
 
                 <section>
-                    <img src="images/chien.gif" />
+                    <img class="raw" src="images/html5.png" />
+                    <aside class="notes">
+                        Et surtout, l'écosystème des navigateurs a considérablement évolué en 10 ans : les browsers récents (IE compris) sont beaucoup plus proches des standrads du W3C, et le besoin d'une couche de compatibilité se fait de moins en moins sentir. Aussi, compte tenu de l'efficacité du code JS pur par rapport à du jQuery, à chaque fois que vous avez la possibilité de vous reposer sur des APIs standards, faites-le ! C'est après tout l'idée derrière HTML5 : standardiser et donner accès à un jeu d'APIs riches et adaptées aux besoins modernes (géolocalisation, gestion de la batterie, etc...)
+                    </aside>
                 </section>
 
                 <section>
-                    <img src="images/velos.jpg" />
+                    <img class="raw" src="images/velos.jpg" />
+                    <aside class="notes">
+                        Il est clair que ces APIs ne sont pas toujours simples à utiliser (ex. API DnD), et qu'il reste des subtiles différences de comportement entre les navigateurs, mais alors qu'avec jQuery vous allez aller plus vite, sans, vous allez prendre des gamelles, mais vous allez petit à petit apprendre l'équilibre et donc à vraiment faire du vélo ;) Le pb est que cela vous prendra un peu de temps, et étant donné qu'un projet de dev a des ressources (humaines/temps) limitées, il est très important d'établir une stratégie en début de projet.
+                    </aside>
                 </section>
 
                 <section>
-                    <img src="images/the_homer.jpg" />
+                    <img src="images/support_matrix.jpg" />
+                    <aside class="notes">
+                        Cette stratégie nécessite tout d'abord de déterminer les navigateurs que vous souhaitez/devez supporter. Si vous choisissez la voie du JS pur, chaque browser supporté implique potentiellement de passer du temps à contourner ses bugs spécifiques et à tester sur celui-ci, et naturellement les browsers anciens vont demander bcp plus de temps que les autres. Vous devez donc choisir sur quels browsers l'appli sera totalement supportée, sur quels browsers elle sera supportée mais avec dégradation gracieuse, et sur quels browsers elle ne sera pas supportée. C'est une affaire de compromis.
+                        Si vous devez supporter IE6 ou même 7, je vous recommande de conserver jQuery. C'est à partir d'IE8 que la question se pose réellement. S'il s'agit d'un projet simple avec du PE, vous pouvez tenter sans jQuery. De toute façon, je vous déconseille d'essayer de supporter IE8 pour une appli JS complexe (trop lent). A partir d'IE9, vous pouvez très raisonnablement espérer vous en sortir sans jQuery, même pour une appli complexe.
+                    </aside>
                 </section>
 
                 <section>
-                    <img src="images/microjs.png" />
+                    <img src="images/crash_test.jpg" />
+                    <aside class="notes">
+                        L'approche sans jQuery nécessite également une approche orientée tests très rigoureuse. Vous devez absolument disposer de tests automatisés exécutables sur tous les browsers supportés ou, à défaut pour certains, d'une checklist de tests manuels. Pensez également à faire des tests de performances, surtout sous IE !!!
+                    </aside>
                 </section>
 
                 <section>
-                    <p>Préciser ici que partir sur la voie du "sans jQuery" nécessite une pratique assidue des tests automatisés...
-                        (Insérer une image de crash test ?)</p>
+                    <h2>Polyfilling</h2>
+                    <pre><code class="javascript"data-trim contenteditable>
+if ('querySelector' in document && 
+    'localStorage' in window && 
+    'addEventListener' in window) {
+    // Go!
+} else {
+    // Polyfill all the things...
+}
+                    </code></pre>
+                    <aside class="notes">
+                        Dans certains cas, l'implémentation de certaines APIs dans un ou plusieurs browsers ne sera pas conforme au standard. On utilisera donc un polyfill, c.a.d une petite lib qui corrige/complète l'implémentation native. On aura alors recours à ce genre de tests pour déterminer s'il faut polyfiller.
+                    </aside>
+                </section>
+
+                <section>
+                    <img class="raw" src="images/modernizr.png" />
+                    <aside class="notes">
+                        Ou alors vous pouvez utiliser Modernizr, qui fait ce genre de tests pour vous très facilement.
+                    </aside>
+                </section>
+
+                <section>
+                    <h2>Modernizr</h2>
+                    <pre><code class="javascript"data-trim contenteditable>
+if (Modernizr.localStorage) {
+   // Go!
+} else {
+   // Polyfill all the things...
+}
+                    </code></pre>
+                    <aside class="notes">
+                        Bien, il est temps maintenant de répondre à la question : comment se passer de jQuery ?
+                    </aside>
                 </section>
 
                 <section>
@@ -215,10 +266,6 @@ document.querySelector("#button-container button")
 
                 <section>
                     <img src="images/polyfill.png" />
-                </section>
-
-                <section>
-                    Parler ici de Modernizr ?
                 </section>
 
                 <section>
@@ -631,9 +678,178 @@ element.addEventListener(transitionEnd, function(event) {
                 </section>
                 
                 <section>
-                    <img src="images/jquery_ui.png" />
+                    <img class="raw" src="images/jquery_ui.png" />
                     <aside class="notes">
                         Bla bla bla...
+                    </aside>
+                </section>
+
+                <section>
+                    <h2>Web components</h2>
+                    <h3>Un modèle de composant pour le web</h3>
+                    <img src="images/webcomponents.png" />
+                    <aside class="notes">
+                        Ce modèle est constitué de 5 concepts, qui seront à terme implémentés nativement dans les navigateurs.
+                    </aside>
+                </section>
+
+                <section>
+                    <h2>Templates</h2>
+                    <pre><code class="html" data-trim contenteditable>
+&lt;template id="commentTemplate"&gt;
+    &lt;div&gt;
+        &lt;img src=""&gt;
+        &lt;div class="comment-text"&gt;&lt;/div&gt;
+    &lt;/div&gt;
+&lt;/template&gt;
+                    </code></pre>
+                    <pre><code class="javascript" data-trim contenteditable>
+var tpl = document.querySelector("#commentTemplate");
+tpl.content.querySelector(".comment-text").innerHTML = ...;
+document.body.appendChild(tpl.content.cloneNode(true));
+                    </code></pre>
+                    <aside class="notes">
+                        Une balise template fait son apparition, le HTML qu'elle contient est parsé mais pas affiché. S'il contient du script, il ne sera pas executé. On peut récuperer le contenu du template en JS, le manipuler puis l'insérer dans le DOM.
+                    </aside>
+                </section>
+
+                <section>
+                    <h2>Decorators</h2>
+                    <pre><code class="html" data-trim contenteditable>
+&lt;decorator id="modal-controls"&gt;
+   &lt;template&gt;
+      &lt;section&gt;
+         &lt;header&gt;
+            &lt;a id="toggle" href="#"&gt;Maximize&lt;/a&gt;
+            &lt;a id="close" href="#"&gt;Close&lt;/a&gt;
+         &lt;/header&gt;
+         &lt;content&gt;&lt;/content&gt;
+      &lt;/section&gt;
+   &lt;/template&gt;
+&lt;/decorator&gt;
+                    </code></pre>
+                    <pre><code class="css" data-trim contenteditable>
+.my-modal {
+   decorator: url(#modal-controls);
+}
+                    </code></pre>
+                    <aside class="notes">
+                        Les décorateurs sont destinés à améliorer ou modifier la présentation d'un élément existant (description de l'exemple). La balise content est un point d'insertion pour l'élément original. Notez toutefois que c'est le seul concept qui n'a pas encore été spécifié officiellement par le W3C, l'exemple proposé n'est qu'un concept en cours de discussion...
+                    </aside>
+                </section>
+
+                <section>
+                    <h2>Custom elements</h2>
+                    <pre><code class="html" data-trim contenteditable>
+&lt;element extends="button" name="my-button" attributes="foo bar"&gt;
+    &lt;template&gt;...&lt;/template&gt;
+    &lt;script&gt;...&lt;/script&gt;
+&lt;/element&gt;
+                    </code></pre>
+                    <aside class="notes">
+                        L'introduction des custom elements permet aux développeurs de créer leurs propres types d'éléments DOM. Ils peuvent contenir du JS, et ainsi maintenir un état et exposer une API accessible via le DOM.
+                    </aside>
+                </section>
+
+                <section>
+                    <h2>Shadow DOM</h2>
+                    <h2>HTML imports</h2>
+                    <pre><code class="html" data-trim contenteditable>
+&lt;link rel="import" href="my-component.html"&gt;
+                    </code></pre>
+                    <aside class="notes">
+                        L'objectif du Shadow DOM est de permettre l'encapsulation en cachant des sous-arbres du DOM. Le concept existe depuis longtemps, la balise vidéo est d'ailleurs implémentée de cette façon, mais elle sera désormais accessible aux devs web. Les imports HTML permettent simplement de charger ses web components depuis un fichier externe.
+
+                        Bon maintenant vous allez me dire "c'est génial tout ça, mais si ça ne marche dans aucun navigateur...". Il existe 2 librairies, Polymer et X-Tag, qui vous donnent accès à ces possibilités dès aujourd'hui. Ils se sont d'ailleurs récemment mis d'accord pour conjuguer leurs efforts et se baser sur la même couche de polyfills.
+                    </aside>
+                </section>
+
+                <section>
+                    <h2>Web components</h2>
+                    <h3>Avec X-Tag</h3>
+                    <browser-compat
+                        ie="9"
+                        ff="5"
+                        cr="4"
+                        sa="4"
+                        op="11" />
+                    <aside class="notes">
+                        
+                    </aside>
+                </section>
+
+                <section>
+                    <h2>Un exemple ?</h2>
+                    <pre><code class="html" data-trim contenteditable>
+&lt;browser-compat
+    ie="9"
+    ff="5"
+    cr="4"
+    sa="4"
+    op="11" /&gt;
+                    </code></pre>
+                    <aside class="notes">
+                        
+                    </aside>
+                </section>
+
+                <section>
+                    <h2>Un exemple ?</h2>
+                    <pre><code class="html" data-trim contenteditable>
+&lt;polymer-element name="browser-compat"
+    attributes="ie ff cr sa op"&gt;
+    &lt;template&gt;
+        &lt;style&gt;...&lt;/style&gt;
+        &lt;table class="browser-compat"&gt;
+            &lt;tr&gt;
+                &lt;td&gt;&lt;img src="images/ie.png" /&gt;&lt;/td&gt;
+                ...
+            &lt;/tr&gt;
+            &lt;tr&gt;
+                &lt;td class="{{ie_class}}"&gt;&gt;= {{ie}}&lt;/td&gt;
+                ...
+            &lt;/tr&gt;
+        &lt;/table&gt;
+    &lt;/template&gt;
+    &lt;script&gt;...&lt;/script&gt;
+&lt;/polymer-element&gt;
+                    </code></pre>
+                    <aside class="notes">
+                        
+                    </aside>
+                </section>
+
+                <section>
+                    <h2>Un exemple ?</h2>
+                    <pre><code class="javascript" data-trim contenteditable>
+Polymer('browser-compat', {
+    created: function() {
+        switch(parseInt(this.ie)) {
+            case 10:
+                this.ie_class = 'red';
+                break;
+            case 9:
+                this.ie_class = 'yellow';
+                break;
+            default:
+                this.ie_class = 'green';
+                break;
+        }
+    }
+});
+                    </code></pre>
+                    <aside class="notes">
+                        
+                    </aside>
+                </section>
+
+                <section>
+                    <h2>Codez pour le futur !</h2>
+                    <img src="images/pluto.jpg" />
+                    <img src="images/titan.jpg" />
+                    <p><small>Copyright Steve Thomas Art & Illustration, LLC</small></p>
+                    <aside class="notes">
+                        
                     </aside>
                 </section>
 
