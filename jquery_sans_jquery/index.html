@@ -15,7 +15,8 @@
 		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 
 		<link rel="stylesheet" href="css/reveal.min.css">
-		<link rel="stylesheet" href="css/theme/default.css" id="theme">
+		<!--<link rel="stylesheet" href="css/theme/default.css" id="theme">-->
+        <link rel="stylesheet" href="css/theme/sky.css" id="theme">
         <link rel="stylesheet" href="css/custom.css">
 
 		<!-- For syntax highlighting -->
@@ -59,7 +60,7 @@
 
                 <section>
                     <h2>2006</h2>
-                    <img class="raw" src="images/jquery_logo.png" />
+                    <img class="raw" src="images/jquery_logo2.png" />
                     <aside class="notes">
                         Et puis en janvier 2006 apparait jQuery. Même si d'autres librairies sont arrivées avant, comme Prototype, jQuery a sans doute été le vrai déclencheur du renouveau de JS. Avec jQuery, manipuler le DOM ou faire des requêtes Ajax devient facile. jQuery abstrait parfaitement les différences d'impl. des navigateurs.
                     </aside>
@@ -266,6 +267,85 @@ document.querySelector("#button-container button")
 
                 <section>
                     <img src="images/polyfill.png" />
+                </section>
+
+                <section>
+                    <h2>Plus verbeux ?</h2>
+                    <pre><code class="javascript"data-trim contenteditable>
+var $ = document.querySelector.bind(document);
+Element.prototype.on = Element.prototype.addEventListener;
+
+var hiddenBox = $("#banner-message");
+$("#button-container button").on("click", function(event) {
+    hiddenBox.setAttribute("style", "display: block");
+});
+                    </code></pre>
+                    <aside class="notes">
+                        Il reste une chose qui me dérange dans ce code, c'est le setAttribute, je préfèrerais utiliser des classes CSS...
+                    </aside>
+                </section>
+
+                <section>
+                    <h2 class="sensitive">Element.className</h2>
+                    <pre><code class="javascript"data-trim contenteditable>
+hiddenBox.className += ' hidden';
+                    </code></pre>
+                    <pre><code class="javascript"data-trim contenteditable>
+hiddenBox.className.replace('hidden', '');
+                    </code></pre>
+                    <aside class="notes">
+                        La propriété className est universelle, mais on se retrouve à gérer une simple string, ce qui n'est pas pratique...
+                    </aside>
+                </section>
+
+                <section>
+                    <h2 class="sensitive">Element.classList</h2>
+                    <pre><code class="javascript"data-trim contenteditable>
+hiddenBox.classList.add('hidden');
+hiddenBox.classList.remove('hidden');
+                    </code></pre>
+                    <pre><code class="javascript"data-trim contenteditable>
+var hiddenBox = $("#banner-message");
+$("#button-container button").on("click", function(event) {
+    hiddenBox.classList.toggle('hidden');
+});
+                    </code></pre>
+                    <aside class="notes">
+                        La propriété classList est beaucoup plus pratique, surtout avec la méthode toggle. Hélas...
+                    </aside>
+                </section>
+
+                <section>
+                    <h2 class="sensitive">Element.classList</h2>
+                    <browser-compat
+                        ie="10"
+                        ff="3.6"
+                        cr="8"
+                        sa="5.1"
+                        op="11.5" />
+                    <aside class="notes">
+                        Mais je vous rassure, on trouve un parfait polyfill sur le MDN ;)
+                        Tant qu'on en est à parler de la manipulation du DOM, je voudrais vous présenter 2 APIs très intéressantes
+                    </aside>
+                </section>
+
+                <section>
+                    <h2 class="sensitive">insertAdjacentHTML</h2>
+                    <pre><code class="javascript"data-trim contenteditable>
+$('#box').before('<p>Test</p>');
+$('#box').after('<p>Test</p>');
+$('#box').append('<p>Test</p>');
+$('#box').prepend('<p>Test</p>');
+                    </code></pre>
+                    <pre><code class="javascript"data-trim contenteditable>
+$('#box').insertAdjacentHTML('beforebegin', '<p>Test</p>');
+$('#box').insertAdjacentHTML('afterend', '<p>Test</p>');
+$('#box').insertAdjacentHTML('beforeend', '<p>Test</p>');
+$('#box').insertAdjacentHTML('afterbegin', '<p>Test</p>');
+                    </code></pre>
+                    <aside class="notes">
+                        Cette méthode permet d'insérer facilement du HTML (sous forme de string) à un endroit spécifique du DOM. Ironiquement, elle a été introduite par M$ dans IE4, et a été adoptée par la suite par les autres browsers.
+                    </aside>
                 </section>
 
                 <section>
