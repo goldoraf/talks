@@ -55,37 +55,43 @@
                 </section>
 
                 <section>
-                    <h2>Code testable ?</h2>
-                    <pre style="font-size: 0.4em"><code class="javascript" contenteditable>
-var results = $('#results');
-
-$('#search-form').on('submit', function(e) {
-    e.preventDefault();
-
-    var term = $(this).find('input[name="search"]').val();
-
-    $.ajax('http://search.twitter.com/search.json', {
-        data: { q: term },
-        dataType: 'jsonp',
-        success: function(data) {
-            data.results.forEach(function(tweet) {
-                results.append(
-                    '&lt;li&gt;' + tweet.text + '&lt;/li&gt;'
-                );
-            });
-        }
-    });
-});
-                    </code></pre>
+                    <h2>Les 3 règles du TDD</h2>
+                    <ul>
+                        <li>On n'ajoute du code que pour faire passer un test</li>
+                        <li>Les tests doivent être le plus simple possible</li>
+                        <li>On écrit le minimum de code requis pour faire passer le test</li>
+                    </ul>
                 </section>
 
                 <section>
-                    <h2>Code testable</h2>
+                    <h2>Réactions typiques</h2>
+                    <blockquote>C'est stupide !</blockquote>
+                    <blockquote>On perd du temps à écrire des tests !</blockquote>
+                    <blockquote>Cela perturbe mon flux !</blockquote>
+                </section>
+
+                <section>
+                    <h2>Pourtant...</h2>
+                    <blockquote>En pratiquant le TDD, je ne suis jamais à plus de 5 minutes d'un code totalement fonctionnel !</blockquote>
+                </section>
+
+                <section>
+                    <h2>Avantages</h2>
                     <ul>
-                        <li>Single responsibility principle</li>
-                        <li>Configurable</li>
-                        <li>Mockable</li>
-                        <li>Simple !</li>
+                        <li>Vérification permanente du bon fonctionnement du code</li>
+                        <li>Documentation toujours à jour</li>
+                        <li>Confiance dans son refacto</li>
+                        <li>Moins de temps passé à débugger</li>
+                        <li>Code mieux conçu</li>
+                    </ul>
+                </section>
+
+                <section>
+                    <h2>Que voulons-nous ?</h2>
+                    <ul>
+                        <li>Exécution rapide !</li>
+                        <li>Exécution dans un environnement réaliste</li>
+                        <li>Simulation des évènements utilisateur</li>
                     </ul>
                 </section>
 
@@ -106,22 +112,10 @@ $('#search-form').on('submit', function(e) {
                 </section>
 
                 <section>
-                    <img style="border: none; background: none; box-shadow: none;" src="images/grunt-logo.svg" height="200px" />
-                    <pre style="font-size: 0.5em"><code contenteditable>
-Running "qunit:all" (qunit) task
-Testing test/client/unit/runner.html
-.............<span class="green">OK</span>
->> 19 assertions passed (139ms)
-
-<span class="green">Done, without errors.</span>
-                    </code></pre>
-                </section>
-
-                <section>
                     <h2>Test first</h2>
                     <pre style="font-size: 0.5em"><code class="javascript" contenteditable>
 test("On peut créer une vue", function() {
-    var view = new App.ResultsView('#results');
+    var view = new App.ContactsView('#contacts');
 
     ok(view);
 });
@@ -133,7 +127,7 @@ test("On peut créer une vue", function() {
                     <pre style="font-size: 0.6em"><code class="javascript" contenteditable>
 window.App = {};
 
-App.ResultsView = function(selector) {
+App.ContactsView = function(selector) {
     this.elt = $(selector);
 };
                     </code></pre>
@@ -142,11 +136,11 @@ App.ResultsView = function(selector) {
                 <section>
                     <h2>On teste</h2>
                     <pre style="font-size: 0.5em"><code class="javascript" contenteditable>
-test("On peut ajouter un tweet", function() {
-    var view = new App.ResultsView('#results');
-    view.addTweet('test');
+test("On peut ajouter un contact", function() {
+    var view = new App.ContactsView('#contacts');
+    view.addContact('John Doe');
 
-    ok($('#results').html().match('test'));
+    ok($('#contacts').html().match('John Doe'));
 });
                     </code></pre>
                 </section>
@@ -154,26 +148,63 @@ test("On peut ajouter un tweet", function() {
                 <section>
                     <h2>On implémente</h2>
                     <pre style="font-size: 0.5em"><code class="javascript" contenteditable>
-App.ResultsView.prototype.addTweet = function(text) {
-    this.elt.append('&lt;li&gt;' + tweet.text + '&lt;/li&gt;');
+App.ContactsView.prototype.addContact = function(name) {
+    this.elt.append('&lt;li&gt;' + name + '&lt;/li&gt;');
 };
                     </code></pre>
                 </section>
 
                 <section>
-                    <h2>Et là, c'est le drame...</h2>
+                    <h2>Facile, non ?</h2>
+                    <h3>Mais il y a d'autres options...</h3>
+                </section>
+
+                <section>
+                    <h2>Jasmine</h2>
+                    <pre style="font-size: 0.5em"><code class="javascript" contenteditable>
+describe("A suite", function() {
+    it("contains spec with an expectation", function() {
+        expect(true).toBe(true);
+    });
+});
+                    </code></pre>
+                </section>
+
+                <section>
+                    <h2>Mocha</h2>
+                    <pre style="font-size: 0.5em"><code class="javascript" contenteditable>
+describe('Contacts service', function() {
+    it('should persists all user\'s searches', function() {
+        ...
+    });
+
+    describe('search', function() {
+        beforeEach(function() {
+            ...
+        });
+
+        it('...', function() {
+            ...
+        });
+    });
+});
+                    </code></pre>
+                </section>
+
+                <section>
+                    <h2>Mon test échoue... Pourquoi ?!?</h2>
                     <pre style="font-size: 0.5em"><code class="javascript" contenteditable>
 test("On peut chercher des tweets", function() {
-    App.Twitter.search('test', function(data) {
+    App.Contacts.search('John Doe', function(data) {
         ok(data.results);
     });
 });
                     </code></pre>
                     <pre style="font-size: 0.5em"><code class="javascript" contenteditable>
-App.Twitter = {
-    search: function(term, callback) {
-        $.ajax('http://search.twitter.com/search.json', {
-            data: { q: term },
+App.Contacts = {
+    search: function(name, callback) {
+        $.ajax('http://monapp.com/search', {
+            data: { q: name },
             dataType: 'jsonp',
             success: callback
         });
@@ -186,9 +217,9 @@ App.Twitter = {
                     <h2>Tester de l'asynchrone</h2>
                     <h3>Avec QUnit</h3>
                     <pre><code class="javascript" contenteditable>
-asyncTest("On peut chercher des tweets", function() {
+asyncTest("On peut chercher des contacts", function() {
     expect(1);
-    App.Twitter.search('test', function(data) {
+    App.Contacts.search('John Doe', function(data) {
         ok(data.results);
         start();
     });
@@ -210,33 +241,12 @@ $.mockjax({
                 </section>
 
                 <section>
-                    <h2>Mocha</h2>
-                    <pre><code class="javascript" contenteditable>
-describe('Twitter service', function() {
-    it('should persists all user\'s searches', function() {
-        ...
-    });
-
-    describe('search', function() {
-        beforeEach(function() {
-            ...
-        });
-
-        it('...', function() {
-            ...
-        });
-    });
-});
-                    </code></pre>
-                </section>
-
-                <section>
                     <h2>Tester de l'asynchrone</h2>
                     <h3>Avec Mocha</h3>
                     <pre><code class="javascript" contenteditable>
-describe('Twitter service', function() {
+describe('Contacts service', function() {
     it('should search', function(done) {
-        App.Twitter.search('test', 5, function(data) {
+        App.Contacts.search('John Doe', 5, function(data) {
             data.should.have.property('results').with.lengthOf(5);
             done();
         });
@@ -255,9 +265,9 @@ after(function () {
 
 it('should search', function () {
     sinon.stub(jQuery, "ajax");
-    App.Twitter.search('test', sinon.spy());
+    App.Contacts.search('John Doe', sinon.spy());
 
-    assert(jQuery.ajax.calledWithMatch({ url: 'search.twitter.com' }));
+    assert(jQuery.ajax.calledWithMatch({ url: 'monapp.com' }));
 });
                     </code></pre>
                 </section>
@@ -532,7 +542,8 @@ casper.run(function() {
                 </section>
 
                 <section>
-                    <h2>The end</h2>
+                    <h2>Merci de votre attention !</h2>
+                    <h3>Des questions ?</h3>
                 </section>
 
             </div>
