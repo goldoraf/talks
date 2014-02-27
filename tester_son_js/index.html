@@ -1,52 +1,49 @@
 <!doctype html>
 <html lang="en">
 
-	<head>
-		<meta charset="utf-8">
+    <head>
+        <meta charset="utf-8">
 
-		<title>Tester son JS, c'est possible !</title>
+        <title>Tester son JS, c'est possible !</title>
 
-		<meta name="description" content="How to TDD his JS code">
-		<meta name="author" content="Raphaël Rougeron">
+        <meta name="description" content="How to TDD his JS code">
+        <meta name="author" content="Raphaël Rougeron">
 
-		<meta name="apple-mobile-web-app-capable" content="yes" />
-		<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+        <meta name="apple-mobile-web-app-capable" content="yes" />
+        <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
 
-		<link rel="stylesheet" href="css/reveal.css">
-		<link rel="stylesheet" href="css/theme/default.css" id="theme">
+        <link rel="stylesheet" href="css/reveal.css">
+        <!--<link rel="stylesheet" href="css/theme/default.css" id="theme">-->
+        <link rel="stylesheet" href="css/theme/sky.css" id="theme">
 
-		<!-- For syntax highlighting -->
-		<link rel="stylesheet" href="lib/css/zenburn.css">
+        <!-- For syntax highlighting -->
+        <link rel="stylesheet" href="lib/css/zenburn.css">
 
         <link rel="stylesheet" href="css/custom.css">
 
-		<!-- If the query includes 'print-pdf', use the PDF print sheet -->
-		<script>
-			document.write( '<link rel="stylesheet" href="css/print/' + ( window.location.search.match( /print-pdf/gi ) ? 'pdf' : 'paper' ) + '.css" type="text/css" media="print">' );
-		</script>
+        <!-- If the query includes 'print-pdf', use the PDF print sheet -->
+        <script>
+            document.write( '<link rel="stylesheet" href="css/print/' + ( window.location.search.match( /print-pdf/gi ) ? 'pdf' : 'paper' ) + '.css" type="text/css" media="print">' );
+        </script>
 
-		<!--[if lt IE 9]>
-		<script src="lib/js/html5shiv.js"></script>
-		<![endif]-->
-	</head>
+        <!--[if lt IE 9]>
+        <script src="lib/js/html5shiv.js"></script>
+        <![endif]-->
+    </head>
 
-	<body>
+    <body>
 
-		<div class="reveal">
+        <div class="reveal">
 
-			<!-- Any section element inside of this container is displayed as a slide -->
-			<div class="slides">
-
-				<section>
-					<h1>Tester son JS</h1>
-					<h3>C'est possible !</h3>
-					<p>
-						<small>Raphaël Rougeron / <a href="http://twitter.com/goldoraf">@goldoraf</a></small>
-					</p>
-				</section>
+            <!-- Any section element inside of this container is displayed as a slide -->
+            <div class="slides">
 
                 <section>
-                    <img src="images/darth.png" />
+                    <h1>Tester son JS</h1>
+                    <h3>C'est possible !</h3>
+                    <p>
+                        <small>Raphaël Rougeron / <a href="http://twitter.com/goldoraf">@goldoraf</a></small>
+                    </p>
                 </section>
 
                 <section>
@@ -189,11 +186,45 @@ App.Twitter = {
                     <h2>Tester de l'asynchrone</h2>
                     <h3>Avec QUnit</h3>
                     <pre><code class="javascript" contenteditable>
-<b>asyncTest</b>("On peut chercher des tweets", function() {
-    <b>expect(1);</b>
+asyncTest("On peut chercher des tweets", function() {
+    expect(1);
     App.Twitter.search('test', function(data) {
         ok(data.results);
-        <b>start();</b>
+        start();
+    });
+});
+                    </code></pre>
+                </section>
+
+                <section>
+                    <h2>Mock et XHR</h2>
+                    <h3>Avec Mockjax</h3>
+                    <pre><code class="javascript" contenteditable>
+$.mockjax({
+    url: '/search',
+    contentType: 'text/json',
+    responseTime: 750,
+    responseText: { results: [...] }
+});
+                    </code></pre>
+                </section>
+
+                <section>
+                    <h2>Mocha</h2>
+                    <pre><code class="javascript" contenteditable>
+describe('Twitter service', function() {
+    it('should persists all user\'s searches', function() {
+        ...
+    });
+
+    describe('search', function() {
+        beforeEach(function() {
+            ...
+        });
+
+        it('...', function() {
+            ...
+        });
     });
 });
                     </code></pre>
@@ -216,19 +247,6 @@ describe('Twitter service', function() {
 
                 <section>
                     <h2>Mock et XHR</h2>
-                    <h3>Avec Mockjax</h3>
-                    <pre><code class="javascript" contenteditable>
-$.mockjax({
-    url: '/search',
-    contentType: 'text/json',
-    responseTime: 750,
-    responseText: { results: [...] }
-});
-                    </code></pre>
-                </section>
-
-                <section>
-                    <h2>Mock et XHR</h2>
                     <h3>Avec sinon.js</h3>
                     <pre><code class="javascript" contenteditable>
 after(function () {
@@ -241,6 +259,64 @@ it('should search', function () {
 
     assert(jQuery.ajax.calledWithMatch({ url: 'search.twitter.com' }));
 });
+                    </code></pre>
+                </section>
+
+                <section>
+                    <h2>sinon.js</h2>
+                    <h3>Spies</h3>
+                    <pre><code class="javascript" contenteditable>
+"test should call subscribers on publish": function () {
+    var callback = sinon.spy();
+    PubSub.subscribe("message", callback);
+    PubSub.publishSync("message");
+    assertTrue(callback.called);
+}
+                    </code></pre>
+                </section>
+
+                <section>
+                    <h2>sinon.js</h2>
+                    <h3>Stubs</h3>
+                    <pre><code class="javascript" contenteditable>
+"test should call all subscribers, even if there are exceptions" : function() {
+    var message = 'an example message';
+    var error = 'an example error message';
+    var stub = sinon.stub().throws();
+    var spy1 = sinon.spy();
+    var spy2 = sinon.spy();
+
+    PubSub.subscribe(message, stub);
+    PubSub.subscribe(message, spy1);
+    PubSub.subscribe(message, spy2);
+
+    PubSub.publishSync(message, undefined);
+
+    assert(spy1.called);
+    assert(spy2.called);
+    assert(stub.calledBefore(spy1));
+}
+                    </code></pre>
+                </section>
+
+                <section>
+                    <h2>sinon.js</h2>
+                    <h3>Mocks</h3>
+                    <pre><code class="javascript" contenteditable>
+"test should call all subscribers when exceptions": function () {
+    var myAPI = { method: function () {} };
+
+    var spy = sinon.spy();
+    var mock = sinon.mock(myAPI);
+    mock.expects("method").once().throws();
+
+    PubSub.subscribe("message", myAPI.method);
+    PubSub.subscribe("message", spy);
+    PubSub.publishSync("message", undefined);
+
+    mock.verify();
+    assert(spy.calledOnce);
+}
                     </code></pre>
                 </section>
 
@@ -284,6 +360,61 @@ assert.lengthOf(tea.flavors, 3);
                 </section>
 
                 <section>
+                    <h2>UI testing</h2>
+                    <h3>Declencher des events d'UI</h3>
+                    <pre><code class="javascript" contenteditable>
+function simulateClick(selector) {
+    try {
+        var event = document.createEvent("MouseEvent");
+        event.initEvent('click', true, true);
+        document.querySelector(selector).dispatchEvent(event);
+    } catch (e) {
+        throw new Error('Can\'t click on element: ' + selector, e);
+    }
+}
+                        </code></pre>
+                </section>
+
+                <section>
+                    <h2>UI testing</h2>
+                    <h3>Declencher des events d'UI #2</h3>
+                    <pre><code class="javascript" contenteditable>
+function simulateClick(selector) {
+    try {
+        var event = new MouseEvent('click', {
+            'view': window,
+            'bubbles': true,
+            'cancelable': true
+        });
+        document.querySelector(selector).dispatchEvent(event);
+    } catch (e) {
+        throw new Error('Can\'t click on element: ' + selector, e);
+    }
+}
+                        </code></pre>
+                </section>
+
+                <section>
+                    <h2>UI testing</h2>
+                    <h3>Declencher des events d'UI #3</h3>
+                    <pre><code class="javascript" contenteditable>
+function simulateKeyAction(selector, action, chromeCode, ffCode, shiftKeyArg) {
+    try {
+        var event = document.createEvent("KeyboardEvent");
+        if (event.initKeyboardEvent) {  // Chrome, IE
+            event.initKeyboardEvent(action, true, true, document.defaultView, chromeCode, 0, "", false, "");
+        } else { // FF
+            event.initKeyEvent(action, true, true, document.defaultView, false, false, shiftKeyArg, false, ffCode, 0);
+        }
+        document.querySelector(selector).dispatchEvent(event);
+    } catch (e) {
+        throw new Error('Can\'t ' + action + ' on element: ' + selector, e);
+    }
+}
+                        </code></pre>
+                </section>
+
+                <section>
                     <h2>Cross-browser testing</h2>
                     <ul>
                         <li>JsTestDriver</li>
@@ -295,15 +426,15 @@ assert.lengthOf(tea.flavors, 3);
                 <section>
                     <h2>Karma</h2>
                     <pre style="font-size: 0.5em"><code contenteditable>
-<span class="green">raphael@eagle:</span>~/Code/syrahjs$ karma start syrah.conf.js 
+raphael@eagle:~/Code/syrahjs$ karma start syrah.conf.js 
 INFO [karma]: Karma server started at http://localhost:9876/
 INFO [launcher]: Starting browser Firefox
 INFO [launcher]: Starting browser Chrome
 INFO [Chrome 24.0 (Linux)]: Connected on socket id O6e8d00_L-soVDkx_e4G
 INFO [Firefox 19.0 (Linux)]: Connected on socket id jmBng24HVrIC8xBX_e4H
-Chrome 24.0 (Linux): Executed 58 of 58 <span class="green">SUCCESS</span> (3.189 secs / 2.986 secs)
-Firefox 19.0 (Linux): Executed 58 of 58 <span class="green">SUCCESS</span> (3.288 secs / 3.039 secs)
-<span class="green">TOTAL: 116 SUCCESS</span>
+Chrome 24.0 (Linux): Executed 58 of 58 SUCCESS (3.189 secs / 2.986 secs)
+Firefox 19.0 (Linux): Executed 58 of 58 SUCCESS (3.288 secs / 3.039 secs)
+TOTAL: 116 SUCCESS
                     </code></pre>
                 </section>
                     
@@ -407,35 +538,35 @@ casper.run(function() {
             </div>
         </div>
 
-		<script src="lib/js/head.min.js"></script>
-		<script src="js/reveal.min.js"></script>
+        <script src="lib/js/head.min.js"></script>
+        <script src="js/reveal.min.js"></script>
 
-		<script>
+        <script>
 
-			// Full list of configuration options available here:
-			// https://github.com/hakimel/reveal.js#configuration
-			Reveal.initialize({
-				controls: true,
-				progress: true,
-				history: true,
-				center: true,
+            // Full list of configuration options available here:
+            // https://github.com/hakimel/reveal.js#configuration
+            Reveal.initialize({
+                controls: true,
+                progress: true,
+                history: true,
+                center: true,
 
-				theme: Reveal.getQueryHash().theme, // available themes are in /css/theme
-				transition: Reveal.getQueryHash().transition || 'default', // default/cube/page/concave/zoom/linear/none
+                theme: Reveal.getQueryHash().theme, // available themes are in /css/theme
+                transition: Reveal.getQueryHash().transition || 'default', // default/cube/page/concave/zoom/linear/none
 
-				// Optional libraries used to extend on reveal.js
-				dependencies: [
-					{ src: 'lib/js/classList.js', condition: function() { return !document.body.classList; } },
-					{ src: 'plugin/markdown/showdown.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
-					{ src: 'plugin/markdown/markdown.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
-					{ src: 'plugin/highlight/highlight.js', async: true, callback: function() { hljs.initHighlightingOnLoad(); } },
-					{ src: 'plugin/zoom-js/zoom.js', async: true, condition: function() { return !!document.body.classList; } },
-					{ src: 'plugin/notes/notes.js', async: true, condition: function() { return !!document.body.classList; } }
-					// { src: 'plugin/remotes/remotes.js', async: true, condition: function() { return !!document.body.classList; } }
-				]
-			});
+                // Optional libraries used to extend on reveal.js
+                dependencies: [
+                    { src: 'lib/js/classList.js', condition: function() { return !document.body.classList; } },
+                    { src: 'plugin/markdown/showdown.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+                    { src: 'plugin/markdown/markdown.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+                    { src: 'plugin/highlight/highlight.js', async: true, callback: function() { hljs.initHighlightingOnLoad(); } },
+                    { src: 'plugin/zoom-js/zoom.js', async: true, condition: function() { return !!document.body.classList; } },
+                    { src: 'plugin/notes/notes.js', async: true, condition: function() { return !!document.body.classList; } }
+                    // { src: 'plugin/remotes/remotes.js', async: true, condition: function() { return !!document.body.classList; } }
+                ]
+            });
 
-		</script>
+        </script>
 
-	</body>
+    </body>
 </html>
