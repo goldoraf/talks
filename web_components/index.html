@@ -1,0 +1,506 @@
+<!doctype html>
+<html lang="en">
+
+    <head>
+        <meta charset="utf-8">
+
+        <title>Web Components : principes et solutions</title>
+
+        <meta name="description" content="Une présentation sur les possibilités des Web Components">
+        <meta name="author" content="Raphaël Rougeron">
+
+        <meta name="apple-mobile-web-app-capable" content="yes" />
+        <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+
+        <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+        <link rel="stylesheet" href="css/reveal.min.css">
+        <link rel="stylesheet" href="css/theme/beige.css" id="theme">
+
+        <link rel="stylesheet" href="css/custom.css">
+
+        <!-- For syntax highlighting -->
+        <link rel="stylesheet" href="lib/css/zenburn.css">
+
+        <!-- If the query includes 'print-pdf', use the PDF print sheet -->
+        <script>
+            document.write( '<link rel="stylesheet" href="css/print/' + ( window.location.search.match( /print-pdf/gi ) ? 'pdf' : 'paper' ) + '.css" type="text/css" media="print">' );
+        </script>
+
+        <!--[if lt IE 9]>
+        <script src="lib/js/html5shiv.js"></script>
+        <![endif]-->
+    </head>
+
+    <body>
+
+        <div class="reveal">
+
+            <!-- Any section element inside of this container is displayed as a slide -->
+            <div class="slides">
+                <section>
+                    <h1>Web Components</h1>
+                    <h2>Principes et solutions</h2>
+                    <p>
+                        <small>Raphaël Rougeron / <a href="http://twitter.com/goldoraf">@goldoraf</a></small>
+                    </p>
+                </section>
+
+                <section>
+                    <h2>Les composants d'UI</h2>
+                    <h3>Un vieux problème...</h3>
+                    <ul>
+                        <li>Packaging :
+                            <ul>
+                                <li>Comportement</li>
+                                <li>Styles</li>
+                                <li>Assets</li>
+                            </ul></li>
+                        <li>Déclaration & utilisation</li>
+                        <li>Theming</li>
+                    </ul>
+                </section>
+
+                <section>
+                    <h2>Des solutions ?</h2>
+                    <img class="raw" src="images/jquery_ui2.png" />
+                </section>
+
+                <section>
+                    <h2>Des solutions ?</h2>
+                    <pre><code class="hljs javascript" data-trim>
+var tabs = $("#tabs").tabs({
+    tabTemplate: "...",
+                                
+    add: function(event, ui) {
+        ...
+    }
+});
+tabs.tabs("add", "#project", "foo")
+    .tabs("select", tabs.tabs("length") - 1);
+                    </code></pre>
+                    <aside class="notes">
+                        API qui n'en est pas une, theming difficile, lenteur, manque de certains widgets pourtant essentiels...
+                    </aside>
+                </section>
+
+                <section>
+                    <h2>Des solutions ?</h2>
+                    <ul>
+                        <li>ZinoUI</li>
+                        <li>jQuery EasyUI</li>
+                        <li>jQWidgets</li>
+                        <li>KendoUI</li>
+                        <li>...</li>
+                    </ul>
+                </section>
+
+                <section>
+                    <h2>Des solutions ?</h2>
+                    <h3>Frameworks</h3>
+                    <ul>
+                        <li>Dojo</li>
+                        <li>YUI</li>
+                        <li>ExtJS</li>
+                        <li>...</li>
+                    </ul>
+                </section>
+
+                <section>
+                    <h2>Des solutions ?</h2>
+                    <h3>Frameworks</h3>
+                    <pre><code class="hljs javascript" data-trim>
+YUI().use('sortable', function(Y) {
+    var sortable = new Y.Sortable({
+        container: '#demo',
+        nodes: 'li',
+        opacity: '.1'
+    });
+});
+                    </code></pre>
+                </section>
+
+                <section>
+                    <h1 style="text-decoration: line-through">Des solutions ?</h2>
+                    <h3>Frameworks</h3>
+                    <img class="raw" src="images/frameworks.png" />
+                </section>
+
+                <section>
+                    <h2>Imaginez...</h2>
+                    <pre><code class="hljs javascript" data-trim>
+var sortable = new Y.Sortable({ container: '#demo', nodes: 'li' });
+                    </code></pre>
+                    <h3>⟱</h3>
+                    <pre><code class="xml" data-trim>
+&lt;link rel="import" href="/path/to/sortable.html"&gt;
+...
+&lt;x-sortable target="li"&gt;
+    &lt;ul&gt;
+        &lt;li&gt;foo&lt;/li&gt;
+        &lt;li&gt;bar&lt;/li&gt;
+    &lt;/ul&gt;
+&lt;/x-sortable&gt;
+                    </code></pre>
+                </section>
+
+                <section>
+                    <h2>Enter web components</h2>
+                    <img src="images/webcomponents.png">
+                </section>
+
+                <section class="large">
+                    <pre><code class="xml" data-trim>
+&lt;element name="tick-tock-clock"&gt;
+    &lt;style&gt;
+        :host {
+            display: block;
+        }
+    &lt;/style&gt;
+    &lt;template&gt;
+        &lt;span id="hh"&gt;&lt;/span&gt;
+        &lt;span id="sep"&gt;:&lt;/span&gt;
+        &lt;span id="mm"&gt;&lt;/span&gt;
+    &lt;/template&gt;
+    &lt;script&gt;
+        ...
+        ({
+            readyCallback: function () {
+                this._root = this.createShadowRoot();
+                this._root.appendChild(this.template.content.cloneNode());
+                if (this.parentElement) {
+                    start.call(this);
+                }
+            },
+            ...
+        });
+    &lt;/script&gt;
+&lt;/element&gt;
+                    </code></pre>
+                </section>
+
+                <section>
+                    <h2>Custom Elements</h2>
+                    <pre><code class="xml" data-trim>
+&lt;hello-world&gt;&lt;/hello-world&gt;
+                    </code></pre>
+                    <pre><code class="hljs javascript" data-trim>
+var HelloWorldPrototype = Object.create(HTMLElement.prototype);
+HelloWorldPrototype.createdCallback = function() {
+  this.textContent = "Hello world!";
+};
+
+var HelloWorld = document.registerElement('hello-world', {
+  prototype: HelloWorldPrototype
+});
+                    </code></pre>
+                    <aside class="notes">
+                        Les CEs permettent aux développeurs de créer leurs propres éléments HTML, en associant du code JS à un nom de tag. Les éléments ainsi créés peuvent être manipulés de la même façon qu'un élément standard. Le prototype fourni à registerElement peut contenir des lifecycles callbacks ; toute autre méthode/prop ajoutée au proto fera partie de l'API du nouvel élément.
+                    </aside>
+                </section>
+
+                <section>
+                    <h2>Custom Elements</h2>
+                    <h3>Lifecycle callbacks</h3>
+                    <ul>
+                        <li>createdCallback</li>
+                        <li>attachedCallback</li>
+                        <li>detachedCallback</li>
+                        <li>attributeChangedCallback</li>
+                    </ul>
+                </section>
+
+                <section>
+                    <h2>Custom Elements</h2>
+                    <pre><code class="hljs javascript" data-trim>
+document.registerElement('super-button', {
+    prototype: SuperButtonPrototype,
+    extends: 'button'
+});
+                    </code></pre>
+                    <pre><code class="xml" data-trim>
+&lt;button is="super-button"&gt;&lt;/button&gt;
+                    </code></pre>
+                </section>
+
+                <section>
+                    <h2>Templates</h2>
+                    <pre><code class="xml" data-trim>
+&lt;template id="comment-tpl"&gt;
+    &lt;div&gt;
+        &lt;img src=""&gt;
+        &lt;div class="comment-text"&gt;&lt;/div&gt;
+    &lt;/div&gt;
+&lt;/template&gt;
+                    </code></pre>
+                    <pre><code class="hljs javascript" data-trim>
+var tpl = document.querySelector("#comment-tpl");
+document.body.appendChild(tpl.content.cloneNode(true));
+                    </code></pre>
+                    <aside class="notes">
+                        Le contenu d'un template est parsé, mais reste "inerte" : les images ne sont pas chargées par ex. La prop. content d'un template est +/- comparable à un document fragment.
+                    </aside>
+                </section>
+
+                <section>
+                    <h2>Shadow DOM</h2>
+                    <pre><code class="xml" data-trim>
+&lt;template id="modal-tpl"&gt;
+    &lt;div class="modal"&gt;
+        &lt;content&gt;&lt;/content&gt;
+        &lt;button&gt;Close&lt;/button&gt;
+    &lt;/div&gt;
+&lt;/template&gt;
+                    </code></pre>
+                    <pre><code class="hljs javascript" data-trim>
+var root = this.createShadowRoot(),
+    tpl = document.querySelector("#modal-tpl");
+
+root.appendChild(tpl.content.cloneNode(true));
+                    </code></pre>
+                    <aside class="notes">
+                        Shadow DOM is an adjunct tree of DOM nodes. These shadow DOM subtrees can be associated with an element, but do not appear as child nodes of the element. Instead the subtrees form their own scope. For example, a shadow DOM subtree can contain IDs and styles that overlap with IDs and styles in the document, but because the shadow DOM subtree (unlike the child node list) is separate from the document, the IDs and styles in the shadow DOM subtree do not clash with those in the document.
+                    </aside>
+                </section>
+
+                <section>
+                    <h2>Light DOM</h2>
+                    <pre><code class="xml" data-trim>
+&lt;x-modal&gt;
+    &lt;h3&gt;My title&lt;/h3&gt;
+    &lt;p&gt;Lorem ipsum&lt;/p&gt;
+&lt;/x-modal&gt;
+                    </code></pre>
+                </section>
+
+                <section>
+                    <h2>Composed DOM</h2>
+                    <pre><code class="xml" data-trim>
+&lt;div class="modal"&gt;
+    &lt;content&gt;&lt;/content&gt;
+    &lt;button&gt;Close&lt;/button&gt;
+&lt;/div&gt;
+                    </code></pre>
+                    <pre><code class="xml" data-trim>
+&lt;x-modal&gt;
+    &lt;h3&gt;My title&lt;/h3&gt;
+    &lt;p&gt;Lorem ipsum&lt;/p&gt;
+&lt;/x-modal&gt;
+                    </code></pre>
+                    <pre><code class="xml" data-trim>
+&lt;div class="modal"&gt;
+    &lt;h3&gt;My title&lt;/h3&gt;
+    &lt;p&gt;Lorem ipsum&lt;/p&gt;
+    &lt;button&gt;Close&lt;/button&gt;
+&lt;/div&gt;
+                    </code></pre>
+                </section>
+
+                <section>
+                    <h2>Insertion points</h2>
+                    <pre><code class="xml" data-trim>
+<div class="modal">
+    <div class="modal-title">
+        <content select="h3">
+            Untitled
+        </content>
+    </div>
+    <content></content>
+    <button>Close</button>
+</div>
+                    </code></pre>
+                </section>
+
+                <section>
+                    <h2>Multiple subtrees</h2>
+                    <pre><code class="xml" data-trim>
+&lt;template id="super-button-tpl"&gt;
+    &lt;div class="super-button"&gt;
+        &lt;button&gt;
+            &lt;content&gt;&lt;/content&gt;
+        &lt;/button&gt;
+    &lt;/div&gt;
+&lt;/template&gt;
+                    </code></pre>
+                    <pre><code class="xml" data-trim>
+&lt;template id="super-duper-button-tpl"&gt;
+    &lt;div class="super-duper-button"&gt;
+        &lt;shadow&gt;&lt;/shadow&gt;
+    &lt;/div&gt;
+&lt;/template&gt;
+                    </code></pre>
+                </section>
+
+                <section>
+                    <h2>Shadow CSS</h2>
+                    <pre><code class="css" data-trim>
+:host {
+    border: 1px solid #ccc;
+}
+:host(.flashy) {
+    border: 1px solid red;
+}
+:host-context(.warning) {
+    background-color: red;
+}
+::content div {
+    color: red;
+}
+                    </code></pre>
+                </section>
+
+                <section>
+                    <h2>Shadow CSS</h2>
+                    <h3>From outside</h3>
+                    <pre><code class="css" data-trim>
+x-foo ::shadow p {
+    color: red;
+}
+x-tabs ::shadow x-panel ::shadow h2 {
+    color: red;
+}
+                    </code></pre>
+                </section>
+
+                <section>
+                    <h2>HTML imports</h2>
+                    <pre><code class="xml" data-trim>
+<link rel="import" href="my-component.html">
+                    </code></pre>
+                </section>
+
+                <section>
+                    <h1>Can I use this now ?</h1>
+                    <h2><span style="text-decoration: line-through">No</span>. Yes. With polyfills.</h2>
+                </section>
+
+                <section class="large">
+                    <h2>X-tag & Brick</h2>
+                    <pre><code class="hljs javascript" data-trim>
+xtag.register('x-foobar', {
+  extends: 'div',
+  lifecycle:{
+    created: function(){
+      ...
+    }
+  },
+  events: {
+    'click:delegate(x-toggler)': function(){...}
+  },
+  accessors: {
+    'togglers': {
+      get: function(){...},
+      set: function(value){...}
+    }
+  },
+  methods: {
+    nextToggler: function(){...}
+  }
+});
+                    </code></pre>
+                </section>
+
+                <section>
+                    <h2>Polymer</h2>
+                    <img style="border: none; box-shadow: none;" src="images/polymer.svg">
+                </section>
+
+                <section class="large">
+                    <h2>Polymer</h2>
+                    <pre><code class="xml" data-trim>
+<polymer-element name="foo-bar">
+  <template>
+    <span>This is {{owner}}'s foo-bar</span>
+    <input type="text" value="{{owner}}">
+  </template>
+  <script>
+    Polymer('foo-bar', {
+      owner: 'Raphaël',
+      ready: function() {
+        //...
+      },
+      ownerChanged: function() {
+
+      },
+      get greeting() {
+        return 'Hello there!';
+      }, 
+      foo: function() {...}
+    });
+  </script>
+</polymer-element>
+                    </code></pre>
+                </section>
+
+                <section class="large">
+                    <h2>Polymer</h2>
+                    <pre><code class="hljs javascript" data-trim>
+Polymer('foo-bar', {
+  owner: 'Raphaël',
+  ready: function() {
+    ...
+  },
+  ownerChanged: function() {
+    ...
+  },
+  get greeting() {
+    return 'Hello there!';
+  }, 
+  foo: function() {...}
+});
+                    </code></pre>
+                </section>
+
+                <section>
+                    <h2>Bosonic !</h2>
+                    <img style="border: none; box-shadow: none;" src="images/bosonic.png">
+                    <p><a href="http://bosonic.github.io">bosonic.github.io</a></p>
+                </section>
+
+                <section>
+                    <h2>Merci de votre attention !</h2>
+                    <h3>Des questions ?</h3>
+                    <p>
+                        <small><a href="http://twitter.com/goldoraf">@goldoraf</a></small>
+                    </p>
+                </section>
+
+            </div>
+
+        </div>
+
+        <script src="lib/js/head.min.js"></script>
+        <script src="js/reveal.js"></script>
+
+        <script>
+
+            // Full list of configuration options available here:
+            // https://github.com/hakimel/reveal.js#configuration
+            Reveal.initialize({
+                controls: true,
+                progress: true,
+                history: true,
+                center: true,
+
+                theme: Reveal.getQueryHash().theme, // available themes are in /css/theme
+                transition: Reveal.getQueryHash().transition || 'default', // default/cube/page/concave/zoom/linear/fade/none
+
+                // Parallax scrolling
+                // parallaxBackgroundImage: 'https://s3.amazonaws.com/hakim-static/reveal-js/reveal-parallax-1.jpg',
+                // parallaxBackgroundSize: '2100px 900px',
+
+                // Optional libraries used to extend on reveal.js
+                dependencies: [
+                    { src: 'lib/js/classList.js', condition: function() { return !document.body.classList; } },
+                    { src: 'plugin/markdown/marked.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+                    { src: 'plugin/markdown/markdown.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+                    { src: 'plugin/highlight/highlight.js', async: true, callback: function() { hljs.initHighlightingOnLoad(); } },
+                    { src: 'plugin/zoom-js/zoom.js', async: true, condition: function() { return !!document.body.classList; } },
+                    { src: 'plugin/notes/notes.js', async: true, condition: function() { return !!document.body.classList; } }
+                ]
+            });
+
+        </script>
+
+    </body>
+</html>
