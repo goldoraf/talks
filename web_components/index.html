@@ -121,7 +121,7 @@ YUI().use('sortable', function(Y) {
                 </section>
 
                 <section>
-                    <h1 style="text-decoration: line-through">Des solutions ?</h2>
+                    <h2 style="text-decoration: line-through">Des solutions ?</h2>
                     <h3>Frameworks</h3>
                     <img class="raw" src="images/frameworks.png" />
                 </section>
@@ -455,6 +455,62 @@ Polymer('foo-bar', {
                     <h2>Bosonic !</h2>
                     <img style="border: none; box-shadow: none;" src="images/bosonic.png">
                     <p><a href="http://bosonic.github.io">bosonic.github.io</a></p>
+                </section>
+
+                <section>
+                    <h2>Bosonic</h2>
+                    <img style="border: none; box-shadow: none;" src="images/bosonic_howitworks.png">
+                </section>
+
+                <section class="large">
+                    <h2>Bosonic</h2>
+                    <pre><code class="xml" data-trim>
+<element name="b-hello-world">
+    <style>
+        :host {
+            text-align: center;
+            font-weight: bold;
+            color: red;
+        }
+    </style>
+    <template>
+        <p>Hello world!</p>
+    </template>
+    <script>
+        ({
+            readyCallback: function() {
+                var root = this.createShadowRoot();
+                root.appendChild(this.template.content.cloneNode(true));
+            }
+        });
+    </script>
+</element>
+                    </code></pre>
+                </section>
+
+                <section>
+                    <h2>Bosonic</h2>
+                    <table class="browser-compat">
+                        <tr>
+                            <td><img src="images/firefox.png" /></td>
+                            <td><img src="images/chrome.png" /></td>
+                            <td><img src="images/ie.png" /></td>
+                            <td><img src="images/safari.png" /></td>
+                            <td><img src="images/opera.png" /></td>
+                        </tr>
+                        <tr>
+                            <td>Firefox 25+</td>
+                            <td>Chrome 30+</td>
+                            <td>Internet Explorer 9+</td>
+                            <td>Safari 6+</td>
+                            <td>Opera 12+</td>
+                        </tr>
+                    </table>
+                </section>
+
+                <section>
+                    <h2>Bosonic</h2>
+                    <img style="border: none; box-shadow: none;" src="images/montebourg.jpg">
                 </section>
 
                 <section>
