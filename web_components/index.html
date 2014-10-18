@@ -15,12 +15,12 @@
         <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 
         <link rel="stylesheet" href="css/reveal.min.css">
-        <link rel="stylesheet" href="css/theme/beige.css" id="theme">
 
-        <link rel="stylesheet" href="css/custom.css">
+        <link rel="stylesheet" href="css/prism.css">
+        <link rel="stylesheet" href="css/custom.css" id="theme">
 
         <!-- For syntax highlighting -->
-        <link rel="stylesheet" href="lib/css/zenburn.css">
+        <!-- <link rel="stylesheet" href="lib/css/zenburn.css"> -->
 
         <!-- If the query includes 'print-pdf', use the PDF print sheet -->
         <script>
@@ -39,77 +39,58 @@
             <!-- Any section element inside of this container is displayed as a slide -->
             <div class="slides">
                 <section>
-                    <h1>Web Components</h1>
-                    <h2>Principes et solutions</h2>
-                    <p>
-                        <small>Raphaël Rougeron / <a href="http://twitter.com/goldoraf">@goldoraf</a></small>
+                    <h1>Web&nbsp;Components</h1>
+                    <p class="speaker">
+                        Raphaël Rougeron    <a href="http://twitter.com/goldoraf">@goldoraf</a>
                     </p>
                 </section>
 
-                <section>
-                    <h2>Les composants d'UI</h2>
-                    <h3>Un vieux problème...</h3>
-                    <ul>
-                        <li>Packaging :
-                            <ul>
-                                <li>Comportement</li>
-                                <li>Styles</li>
-                                <li>Assets</li>
-                            </ul></li>
-                        <li>Déclaration & utilisation</li>
-                        <li>Theming</li>
-                    </ul>
+                <section tagcloud>
+                    Onglets
+                    Calendrier
+                    Slider
+                    Accordion
+                    Datepicker
+                    Dropdown
+                    Datagrid
+                    Graphiques
+                    Navigation
+                    Tooltip
+                    Autocomplete
+                    Modal
+                    Overlay
+                    Drag n'drop
+                    Tree
+                    Panels
+                    Notification
+                </section>
+                <section tagcloud large bw>
+                    &lt;h1&gt;
+                    &lt;p&gt;
+                    &lt;section&gt;
+                    &lt;div&gt;
+                    &lt;form&gt;
+                    &lt;input&gt;
+                    &lt;span&gt;
+                    &lt;img&gt;
+                    &lt;svg&gt;
+                    &lt;select&gt;
+                    &lt;textarea&gt;
+                    &lt;a&gt;
+                    &lt;li&gt;
+                    &lt;pre&gt;
+                    &lt;canvas&gt;
+                    &lt;footer&gt;
+                    &lt;aside&gt;
+                    &lt;article&gt;
                 </section>
 
                 <section>
-                    <h2>Des solutions ?</h2>
-                    <img class="raw" src="images/jquery_ui2.png" />
+                    <img class="raw" src="images/modal.png" />
                 </section>
 
                 <section>
-                    <h2>Des solutions ?</h2>
-                    <pre><code class="hljs javascript" data-trim>
-var tabs = $("#tabs").tabs({
-    tabTemplate: "...",
-                                
-    add: function(event, ui) {
-        ...
-    }
-});
-tabs.tabs("add", "#project", "foo")
-    .tabs("select", tabs.tabs("length") - 1);
-                    </code></pre>
-                    <aside class="notes">
-                        API qui n'en est pas une, theming difficile, lenteur, manque de certains widgets pourtant essentiels...
-                    </aside>
-                </section>
-
-                <section>
-                    <h2>Des solutions ?</h2>
-                    <ul>
-                        <li>ZinoUI</li>
-                        <li>jQuery EasyUI</li>
-                        <li>jQWidgets</li>
-                        <li>KendoUI</li>
-                        <li>...</li>
-                    </ul>
-                </section>
-
-                <section>
-                    <h2>Des solutions ?</h2>
-                    <h3>Frameworks</h3>
-                    <ul>
-                        <li>Dojo</li>
-                        <li>YUI</li>
-                        <li>ExtJS</li>
-                        <li>...</li>
-                    </ul>
-                </section>
-
-                <section>
-                    <h2>Des solutions ?</h2>
-                    <h3>Frameworks</h3>
-                    <pre><code class="hljs javascript" data-trim>
+                    <pre><code class="language-javascript">
 YUI().use('sortable', function(Y) {
     var sortable = new Y.Sortable({
         container: '#demo',
@@ -120,42 +101,130 @@ YUI().use('sortable', function(Y) {
                     </code></pre>
                 </section>
 
+                <section class="large">
+                    <pre><code class="language-javascript">require(
+    ["dijit/layout/TabContainer", "dijit/layout/ContentPane"], 
+    function(TabContainer, ContentPane){
+        var tc = new TabContainer({
+            style: "height: 100%; width: 100%;"
+        }, "tc1-prog");
+        var cp1 = new ContentPane({
+             title: "Food",
+             content: "We offer amazing food"
+        });
+        tc.addChild(cp1);
+        var cp2 = new ContentPane({
+             title: "Drinks",
+             content: "We are known for our drinks."
+        });
+        tc.addChild(cp2);
+        tc.startup();
+    }
+);
+                    </code></pre>
+                </section>
+
                 <section>
-                    <h2 style="text-decoration: line-through">Des solutions ?</h2>
-                    <h3>Frameworks</h3>
+                    <pre><code class="language-javascript">
+var tabs = $("#tabs").tabs({
+    tabTemplate: "...",
+                                
+    add: function(event, ui) {
+        ...
+    }
+});
+        
+tabs.tabs("add", "#project", "foo")
+    .tabs("select", tabs.tabs("length") - 1);
+                    </code></pre>
+                    <aside class="notes">
+                        API qui n'en est pas une, theming difficile, lenteur, manque de certains widgets pourtant essentiels...
+                    </aside>
+                </section>
+
+                <section>
+                    <img class="raw" src="images/jquery_css.png" />
+                </section>
+
+                <section>
                     <img class="raw" src="images/frameworks.png" />
                 </section>
 
-                <section>
-                    <h2>Imaginez...</h2>
-                    <pre><code class="hljs javascript" data-trim>
-var sortable = new Y.Sortable({ container: '#demo', nodes: 'li' });
-                    </code></pre>
-                    <h3>⟱</h3>
-                    <pre><code class="xml" data-trim>
-&lt;link rel="import" href="/path/to/sortable.html"&gt;
-...
-&lt;x-sortable target="li"&gt;
-    &lt;ul&gt;
-        &lt;li&gt;foo&lt;/li&gt;
-        &lt;li&gt;bar&lt;/li&gt;
-    &lt;/ul&gt;
-&lt;/x-sortable&gt;
+                <section class="large">
+                    <pre><code class="language-javascript">
+var TabbedArea = React.createClass({
+    handleClick: function(idx, e) {
+        e.preventDefault();
+        this.props.switchTab(idx);
+    },
+    render: function() {
+        return this.transferPropsTo(
+            &lt;div&gt;
+                &lt;ul className="nav nav-pills nav-justified"&gt;
+                    {this.renderTabs()}
+                &lt;/ul&gt;
+                &lt;div className="tab-content"&gt;
+                    {this.renderPanes()}
+                &lt;/div&gt;
+            &lt;/div&gt;
+        );
+    },
+    ...
+});
                     </code></pre>
                 </section>
 
                 <section>
-                    <h2>Enter web components</h2>
-                    <img src="images/webcomponents.png">
+                    <pre><code class="language-javascript">
+MyApp.DatepickerComponent = Ember.TextField.extend({
+    didInsertElement: function() {
+        this.$().datepicker();
+    } 
+});
+                    </code></pre>
+                </section>
+
+                <section>
+                    <h2>Challenges</h2>
+                    <ul>
+                        <li>Packaging (comportement, styles, assets)</li>
+                        <li>Gestion des dépendances</li>
+                        <li>Theming</li>
+                        <li>Déclaration & utilisation</li>
+                    </ul>
+                </section>
+
+                <section tagcloud>
+                    &lt;tabs-panel&gt;
+                    &lt;x-calendar&gt;
+                    &lt;input is="slider"&gt;
+                    &lt;b-accordion&gt;
+                    &lt;drop-down&gt;
+                    &lt;data-grid&gt;
+                    &lt;chart-donut&gt;
+                    &lt;nav-bar&gt;
+                    &lt;tether-tooltip&gt;
+                    &lt;input is="autocomplete"&gt;
+                    &lt;x-modal&gt;
+                    &lt;b-overlay&gt;
+                    &lt;core-drag&gt;
+                    &lt;b-tree&gt;
+                    &lt;paper-panel&gt;
+                    &lt;notification-flash&gt;
+                </section>
+
+                <section>
+                    <img class="raw" src="images/webcomponents.png" />
+                </section>
+
+                <section>
+                    <img class="raw" src="images/w3c.png" />
                 </section>
 
                 <section class="large">
-                    <pre><code class="xml" data-trim>
-&lt;element name="tick-tock-clock"&gt;
+                    <pre><code class="language-markup">&lt;element name="tick-tock-clock"&gt;
     &lt;style&gt;
-        :host {
-            display: block;
-        }
+        :host { display: block; }
     &lt;/style&gt;
     &lt;template&gt;
         &lt;span id="hh"&gt;&lt;/span&gt;
@@ -163,28 +232,28 @@ var sortable = new Y.Sortable({ container: '#demo', nodes: 'li' });
         &lt;span id="mm"&gt;&lt;/span&gt;
     &lt;/template&gt;
     &lt;script&gt;
-        ...
+        var tpl = document.currentScript
+                               .parentNode.querySelector('template');
         ({
             readyCallback: function () {
                 this._root = this.createShadowRoot();
-                this._root.appendChild(this.template.content.cloneNode());
-                if (this.parentElement) {
-                    start.call(this);
-                }
-            },
-            ...
+                this._root.appendChild(tpl.content.cloneNode(true));
+            }
         });
     &lt;/script&gt;
 &lt;/element&gt;
                     </code></pre>
                 </section>
 
+                <section data-background="#c92c2c">
+                    <h2>Custom Elements</h2>
+                </section>
+
                 <section>
                     <h2>Custom Elements</h2>
-                    <pre><code class="xml" data-trim>
-&lt;hello-world&gt;&lt;/hello-world&gt;
-                    </code></pre>
-                    <pre><code class="hljs javascript" data-trim>
+                    <h4>Définir de nouveaux éléments HTML</h4>
+                    <h6>&lt;hello-world&gt;&lt;/hello-world&gt;</h6>
+                    <pre><code class="language-javascript">            
 var HelloWorldPrototype = Object.create(HTMLElement.prototype);
 HelloWorldPrototype.createdCallback = function() {
   this.textContent = "Hello world!";
@@ -201,7 +270,7 @@ var HelloWorld = document.registerElement('hello-world', {
 
                 <section>
                     <h2>Custom Elements</h2>
-                    <h3>Lifecycle callbacks</h3>
+                    <h4>Lifecycle callbacks</h4>
                     <ul>
                         <li>createdCallback</li>
                         <li>attachedCallback</li>
@@ -212,20 +281,23 @@ var HelloWorld = document.registerElement('hello-world', {
 
                 <section>
                     <h2>Custom Elements</h2>
-                    <pre><code class="hljs javascript" data-trim>
+                    <h4>Etendre des éléments existants</h4>
+                    <h6>&lt;button is="super-button"&gt;&lt;/button&gt;</h6>
+                    <pre><code class="language-javascript">
 document.registerElement('super-button', {
     prototype: SuperButtonPrototype,
     extends: 'button'
 });
                     </code></pre>
-                    <pre><code class="xml" data-trim>
-&lt;button is="super-button"&gt;&lt;/button&gt;
-                    </code></pre>
+                </section>
+
+                <section data-background="#358ccb">
+                    <h2>HTML Templates</h2>
                 </section>
 
                 <section>
-                    <h2>Templates</h2>
-                    <pre><code class="xml" data-trim>
+                    <h2>HTML Templates</h2>
+                    <pre><code class="language-markup">
 &lt;template id="comment-tpl"&gt;
     &lt;div&gt;
         &lt;img src=""&gt;
@@ -233,7 +305,7 @@ document.registerElement('super-button', {
     &lt;/div&gt;
 &lt;/template&gt;
                     </code></pre>
-                    <pre><code class="hljs javascript" data-trim>
+                    <pre><code class="language-javascript">
 var tpl = document.querySelector("#comment-tpl");
 document.body.appendChild(tpl.content.cloneNode(true));
                     </code></pre>
@@ -242,9 +314,14 @@ document.body.appendChild(tpl.content.cloneNode(true));
                     </aside>
                 </section>
 
+                <section data-background="#2f9c0a">
+                    <h2>Shadow DOM</h2>
+                </section>
+
                 <section>
                     <h2>Shadow DOM</h2>
-                    <pre><code class="xml" data-trim>
+                    <h4>Composition & encapsulation DOM/CSS</h4>
+                    <pre><code class="language-markup">
 &lt;template id="modal-tpl"&gt;
     &lt;div class="modal"&gt;
         &lt;content&gt;&lt;/content&gt;
@@ -252,7 +329,7 @@ document.body.appendChild(tpl.content.cloneNode(true));
     &lt;/div&gt;
 &lt;/template&gt;
                     </code></pre>
-                    <pre><code class="hljs javascript" data-trim>
+                    <pre><code class="language-javascript">
 var root = this.createShadowRoot(),
     tpl = document.querySelector("#modal-tpl");
 
@@ -264,76 +341,115 @@ root.appendChild(tpl.content.cloneNode(true));
                 </section>
 
                 <section>
-                    <h2>Light DOM</h2>
-                    <pre><code class="xml" data-trim>
-&lt;x-modal&gt;
-    &lt;h3&gt;My title&lt;/h3&gt;
-    &lt;p&gt;Lorem ipsum&lt;/p&gt;
-&lt;/x-modal&gt;
-                    </code></pre>
-                </section>
-
-                <section>
-                    <h2>Composed DOM</h2>
-                    <pre><code class="xml" data-trim>
-&lt;div class="modal"&gt;
-    &lt;content&gt;&lt;/content&gt;
-    &lt;button&gt;Close&lt;/button&gt;
+                    <h2>Shadow DOM</h2>
+                    <h4>Composition</h4>
+                    <table style="width: 100%;">
+                        <tr>
+                            <td>
+                               <pre>
+                                    <code class="language-markup">&lt;div class="modal"&gt;</code><code class="language-markup highlight-line">    &lt;content&gt;&lt;/content&gt;</code><code class="language-markup">    &lt;button&gt;Close&lt;/button&gt;
 &lt;/div&gt;
-                    </code></pre>
-                    <pre><code class="xml" data-trim>
-&lt;x-modal&gt;
-    &lt;h3&gt;My title&lt;/h3&gt;
-    &lt;p&gt;Lorem ipsum&lt;/p&gt;
-&lt;/x-modal&gt;
-                    </code></pre>
-                    <pre><code class="xml" data-trim>
+                                </code><span class="code-annotation">Shadow DOM</span></pre>
+                            </td>
+                            <td rowspan="2" style="vertical-align: middle;">
+                                <pre><code class="language-markup">
 &lt;div class="modal"&gt;
     &lt;h3&gt;My title&lt;/h3&gt;
     &lt;p&gt;Lorem ipsum&lt;/p&gt;
     &lt;button&gt;Close&lt;/button&gt;
 &lt;/div&gt;
-                    </code></pre>
+                                </code><span class="code-annotation">Composed DOM</span></pre>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <pre>
+                                    <code class="language-markup">&lt;x-modal&gt;</code><code class="language-markup highlight-line">    &lt;h3&gt;My title&lt;/h3&gt;
+    &lt;p&gt;Lorem ipsum&lt;/p&gt;</code><code class="language-markup">&lt;/x-modal&gt;
+    </code><span class="code-annotation">Light DOM</span></pre>
+                            </td>
+                        </tr>
+                    </table>
+                    
                 </section>
 
                 <section>
-                    <h2>Insertion points</h2>
-                    <pre><code class="xml" data-trim>
-<div class="modal">
-    <div class="modal-title">
-        <content select="h3">
-            Untitled
-        </content>
-    </div>
-    <content></content>
-    <button>Close</button>
-</div>
-                    </code></pre>
+                    <h2>Shadow DOM</h2>
+                    <h4>Insertion points</h4>
+                    <table style="width: 100%;">
+                        <tr>
+                            <td>
+                               <pre>
+                                    <code class="language-markup">&lt;div class="modal"&gt;
+  &lt;div class="modal-title"&gt;</code><code class="language-markup highlight-line">    &lt;content select="h3"&gt;...&lt;/content&gt;</code><code class="language-markup">  &lt;/div&gt;</code><code class="language-markup highlight-line2">    &lt;content&gt;&lt;/content&gt;</code><code class="language-markup">    &lt;button&gt;Close&lt;/button&gt;
+&lt;/div&gt;
+                                </code><span class="code-annotation">Shadow DOM</span></pre>
+                            </td>
+                            <td rowspan="2" style="vertical-align: middle;">
+                                <pre><code class="language-markup">
+&lt;div class="modal"&gt;
+    &lt;div class="modal-title"&gt;
+        My title
+    &lt;/div&gt;
+    &lt;p&gt;Lorem ipsum&lt;/p&gt;
+    &lt;button&gt;Close&lt;/button&gt;
+&lt;/div&gt;
+                                </code><span class="code-annotation">Composed DOM</span></pre>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <pre>
+                                    <code class="language-markup">&lt;x-modal&gt;</code><code class="language-markup highlight-line">    &lt;h3&gt;My title&lt;/h3&gt;</code><code class="language-markup highlight-line2">    &lt;p&gt;Lorem ipsum&lt;/p&gt;</code><code class="language-markup">&lt;/x-modal&gt;
+    </code><span class="code-annotation">Light DOM</span></pre>
+                            </td>
+                        </tr>
+                    </table>
                 </section>
 
                 <section>
-                    <h2>Multiple subtrees</h2>
-                    <pre><code class="xml" data-trim>
-&lt;template id="super-button-tpl"&gt;
+                    <h2>Shadow DOM</h2>
+                    <h4>Multiple subtrees</h4>
+                    <table style="width: 100%;">
+                        <tr>
+                            <td>
+                               <pre>
+                                    <code class="language-markup">&lt;template id="super-button-tpl"&gt;
     &lt;div class="super-button"&gt;
-        &lt;button&gt;
-            &lt;content&gt;&lt;/content&gt;
-        &lt;/button&gt;
+        &lt;button&gt;</code><code class="language-markup highlight-line">            &lt;content&gt;&lt;/content&gt;</code><code class="language-markup">        &lt;/button&gt;
     &lt;/div&gt;
-&lt;/template&gt;
-                    </code></pre>
-                    <pre><code class="xml" data-trim>
-&lt;template id="super-duper-button-tpl"&gt;
-    &lt;div class="super-duper-button"&gt;
-        &lt;shadow&gt;&lt;/shadow&gt;
+&lt;/template&gt;</code><span class="code-annotation">Shadow DOM 1</span></pre>
+                            </td>
+                            <td rowspan="2" style="vertical-align: middle;">
+                                <pre><code class="language-markup">
+&lt;button is="super-duper-button"&gt;
+    Submit
+&lt;/button&gt;
+                                </code><span class="code-annotation">Light DOM</span></pre>
+                                <pre><code class="language-markup">
+&lt;div class="super-duper-button"&gt;
+    &lt;div class="super-button"&gt;
+        &lt;button&gt;Submit&lt;/button&gt;
     &lt;/div&gt;
-&lt;/template&gt;
-                    </code></pre>
+&lt;/div&gt;
+                                </code><span class="code-annotation">Composed DOM</span></pre>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <pre>
+                                    <code class="language-markup">&lt;template id="super-duper-button-tpl"&gt;
+    &lt;div class="super-duper-button"&gt;</code><code class="language-markup highlight-line">        &lt;shadow&gt;&lt;/shadow&gt;</code><code class="language-markup">    &lt;/div&gt;
+&lt;/template&gt;</code><span class="code-annotation">Shadow DOM 2</span></pre>
+                            </td>
+                        </tr>
+                    </table>
                 </section>
 
                 <section>
-                    <h2>Shadow CSS</h2>
-                    <pre><code class="css" data-trim>
+                    <h2>Shadow DOM</h2>
+                    <h4>Shadow CSS</h4>
+                    <pre><code class="language-css">
 :host {
     border: 1px solid #ccc;
 }
@@ -350,39 +466,128 @@ root.appendChild(tpl.content.cloneNode(true));
                 </section>
 
                 <section>
-                    <h2>Shadow CSS</h2>
-                    <h3>From outside</h3>
-                    <pre><code class="css" data-trim>
-x-foo ::shadow p {
+                    <h2>Shadow DOM</h2>
+                    <h4>From outside</h4>
+                    <pre><code class="language-css">
+x-foo::shadow p {
     color: red;
 }
-x-tabs ::shadow x-panel ::shadow h2 {
+x-tabs::shadow x-panel::shadow h2 {
+    color: red;
+}
+x-tabs /deep/ h2 {
     color: red;
 }
                     </code></pre>
+                </section>
+
+                <section data-background="#a67f59">
+                    <h2>HTML imports</h2>
                 </section>
 
                 <section>
                     <h2>HTML imports</h2>
-                    <pre><code class="xml" data-trim>
-<link rel="import" href="my-component.html">
+                    <h4>Charger ses web components</h4>
+                    <pre><code class="language-markup">
+&lt;link rel="import" href="my-component.html"&gt;
                     </code></pre>
                 </section>
 
                 <section>
-                    <h1>Can I use this now ?</h1>
-                    <h2><span style="text-decoration: line-through">No</span>. Yes. With polyfills.</h2>
+                    <h2>On mélange le tout...</h2>
+                    <h4>Vanilla JS Web Component</h4>
                 </section>
 
                 <section class="large">
-                    <h2>X-tag & Brick</h2>
-                    <pre><code class="hljs javascript" data-trim>
+                    <pre><code class="language-markup">
+&lt;template&gt;
+    &lt;style&gt;
+        :host { color: red; }
+    &lt;/style&gt;
+    &lt;div&gt;&lt;/div&gt;
+&lt;/template&gt;
+&lt;script&gt;
+    var tpl = document.currentScript
+                      .parentNode.querySelector('template');
+    var HelloWorldPrototype = Object.create(HTMLElement.prototype);
+    HelloWorldPrototype.createdCallback = function() {
+      this.createShadowRoot();
+      this.shadowRoot.appendChild(document.importNode(tpl, true));
+    };
+    HelloWorldPrototype.say = function() {
+      this.shadowRoot.querySelector('div').textContent = 'Hello';
+    };
+
+    var HelloWorld = document.registerElement('hello-world', {
+      prototype: HelloWorldPrototype
+    });
+&lt;/script&gt;
+                    </code></pre>
+                </section>
+
+                <section>
+                    <h2>Can I use this now ?</h2>
+                    <h3><span style="text-decoration: line-through">No</span>. Yes. With polyfills.</h3>
+                    <table class="browser-compat">
+                        <thead>
+                            <tr>
+                                <th/>
+                                <td><img src="images/firefox.png" /></td>
+                                <td><img src="images/chrome.png" /></td>
+                                <td><img src="images/ie.png" /></td>
+                                <td><img src="images/safari.png" /></td>
+                                <td><img src="images/opera.png" /></td>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <th>Custom Elements</th>
+                                <td></td>
+                                <td class="supported">33</td>
+                                <td></td>
+                                <td></td>
+                                <td class="supported">24</td>
+                            </tr>
+                            <tr>
+                                <th>HTML Templates</th>
+                                <td class="supported">31</td>
+                                <td class="supported">31</td>
+                                <td></td>
+                                <td></td>
+                                <td class="supported">24</td>
+                            </tr>
+                            <tr>
+                                <th>Shadow DOM</th>
+                                <td></td>
+                                <td class="supported">35*</td>
+                                <td></td>
+                                <td></td>
+                                <td class="supported">24</td>
+                            </tr>
+                            <tr>
+                                <th>HTML imports</th>
+                                <td></td>
+                                <td class="supported">36</td>
+                                <td></td>
+                                <td></td>
+                                <td class="supported">24</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </section>
+
+                <section data-background="#c92c2c">
+                    <h2>Librairies</h2>
+                </section>
+
+                <section class="large">
+                    <h2>X-tag</h2>
+                    <h4>Mozilla</h4>
+                    <pre><code class="language-javascript">
 xtag.register('x-foobar', {
   extends: 'div',
   lifecycle:{
-    created: function(){
-      ...
-    }
+    created: function(){...}
   },
   events: {
     'click:delegate(x-toggler)': function(){...}
@@ -401,123 +606,168 @@ xtag.register('x-foobar', {
                 </section>
 
                 <section>
+                    <h2>Brick</h2>
+                    <img src="images/brick.png">
+                </section>
+
+                <section>
                     <h2>Polymer</h2>
+                    <h4>Sucre syntaxique</h4>
                     <img style="border: none; box-shadow: none;" src="images/polymer.svg">
                 </section>
 
                 <section class="large">
                     <h2>Polymer</h2>
-                    <pre><code class="xml" data-trim>
-<polymer-element name="foo-bar">
-  <template>
-    <span>This is {{owner}}'s foo-bar</span>
-    <input type="text" value="{{owner}}">
-  </template>
-  <script>
+                    <pre><code class="language-markup">
+&lt;polymer-element name="foo-bar"&gt;
+  &lt;template&gt;
+    &lt;span&gt;This is {{owner}}'s foo-bar&lt;/span&gt;
+    &lt;input type="text" value="{{owner}}"&gt;
+  &lt;/template&gt;
+  &lt;script&gt;
     Polymer('foo-bar', {
       owner: 'Raphaël',
-      ready: function() {
-        //...
-      },
-      ownerChanged: function() {
+      
+      ready: function() {...},
 
-      },
-      get greeting() {
-        return 'Hello there!';
-      }, 
+      ownerChanged: function() {...},
+      
+      get greeting() {...}, 
       foo: function() {...}
     });
-  </script>
-</polymer-element>
-                    </code></pre>
-                </section>
-
-                <section class="large">
-                    <h2>Polymer</h2>
-                    <pre><code class="hljs javascript" data-trim>
-Polymer('foo-bar', {
-  owner: 'Raphaël',
-  ready: function() {
-    ...
-  },
-  ownerChanged: function() {
-    ...
-  },
-  get greeting() {
-    return 'Hello there!';
-  }, 
-  foo: function() {...}
-});
+  &lt;/script&gt;
+&lt;/polymer-element&gt;
                     </code></pre>
                 </section>
 
                 <section>
-                    <h2>Bosonic !</h2>
+                    <h2>Bosonic</h2>
                     <img style="border: none; box-shadow: none;" src="images/bosonic.png">
                     <p><a href="http://bosonic.github.io">bosonic.github.io</a></p>
                 </section>
 
                 <section>
                     <h2>Bosonic</h2>
+                    <h4>Transformation de code</h4>
                     <img style="border: none; box-shadow: none;" src="images/bosonic_howitworks.png">
                 </section>
 
                 <section class="large">
                     <h2>Bosonic</h2>
-                    <pre><code class="xml" data-trim>
-<element name="b-hello-world">
-    <style>
+                    <h4>Aujourd'hui</h4>
+                    <pre><code class="language-markup">
+&lt;element name="b-hello-world"&gt;
+    &lt;style&gt;
         :host {
-            text-align: center;
-            font-weight: bold;
             color: red;
         }
-    </style>
-    <template>
-        <p>Hello world!</p>
-    </template>
-    <script>
+    &lt;/style&gt;
+    &lt;template&gt;
+        &lt;p&gt;Hello world!&lt;/p&gt;
+    &lt;/template&gt;
+    &lt;script&gt;
         ({
             readyCallback: function() {
                 var root = this.createShadowRoot();
                 root.appendChild(this.template.content.cloneNode(true));
             }
         });
-    </script>
-</element>
+    &lt;/script&gt;
+&lt;/element&gt;
+                    </code></pre>
+                </section>
+
+                <section class="large">
+                    <h2>Bosonic</h2>
+                    <h4>Dans quelques jours</h4>
+                    <pre><code class="language-markup">
+&lt;element name="b-hello-world"&gt;
+    &lt;template&gt;
+        &lt;style&gt;
+            :host {
+                color: red;
+            }
+        &lt;/style&gt;
+        &lt;p&gt;Hello world!&lt;/p&gt;
+    &lt;/template&gt;
+    &lt;script&gt;
+        Bosonic.register({
+            readyCallback: function() {
+                
+            }
+        });
+    &lt;/script&gt;
+&lt;/element&gt;
                     </code></pre>
                 </section>
 
                 <section>
                     <h2>Bosonic</h2>
-                    <table class="browser-compat">
-                        <tr>
-                            <td><img src="images/firefox.png" /></td>
-                            <td><img src="images/chrome.png" /></td>
-                            <td><img src="images/ie.png" /></td>
-                            <td><img src="images/safari.png" /></td>
-                            <td><img src="images/opera.png" /></td>
-                        </tr>
-                        <tr>
-                            <td>Firefox 25+</td>
-                            <td>Chrome 30+</td>
-                            <td>Internet Explorer 9+</td>
-                            <td>Safari 6+</td>
-                            <td>Opera 12+</td>
-                        </tr>
-                    </table>
+                    <ul>
+                        <li>Syntaxe inspirée de la spec</li>
+                        <li>Plate-forme légère</li>
+                        <li>JS ou HTML en sortie</li>
+                    </ul>
                 </section>
 
                 <section>
-                    <h2>Bosonic</h2>
-                    <img style="border: none; box-shadow: none;" src="images/montebourg.jpg">
+                    <h2>Bonnes pratiques</h2>
+                    <ul>
+                        <li>Philosophie UNIX</li>
+                        <li>Privilégier la composition</li>
+                        <li>Penser DOM</li>
+                        <li>Penser mobile</li>
+                        <li>Accessibilité</li>
+                        <li>Fallback</li>
+                    </ul>
+                </section>
+
+                <section>
+                    <h2>Bonnes pratiques</h2>
+                    <h4>Accessibilité</h4>
+                    <img src="images/aria.png"/>
+                </section>
+
+                <section>
+                    <h2>Bonnes pratiques</h2>
+                    <h4>Fallback</h4>
+                    <pre><code class="language-markup">
+&lt;bar-chart&gt;
+    &lt;table&gt;
+        &lt;tr&gt;
+            &lt;td&gt;23&lt;/td&gt;&lt;td&gt;42&lt;/td&gt;&lt;td&gt;31&lt;/td&gt;
+        &lt;/tr&gt;
+        &lt;tr&gt;
+            &lt;td&gt;68&lt;/td&gt;&lt;td&gt;82&lt;/td&gt;&lt;td&gt;91&lt;/td&gt;
+        &lt;/tr&gt;
+        &lt;tr&gt;
+            &lt;td&gt;65&lt;/td&gt;&lt;td&gt;81&lt;/td&gt;&lt;td&gt;11&lt;/td&gt;
+        &lt;/tr&gt;
+    &lt;/table&gt;
+&lt;/bar-chart&gt;
+                    </code></pre>
+                </section>
+
+                <section>
+                    <h2>Questions / réponses</h2>
+                    <h3>Production-ready ?</h3>
+                </section>
+
+                <section>
+                    <h2>Questions / réponses</h2>
+                    <h3>&lt;my-app&gt; ?</h3>
+                </section>
+
+                <section>
+                    <h2>Questions / réponses</h2>
+                    <h3>Quid d'Angular/Ember/React... ?</h3>
                 </section>
 
                 <section>
                     <h2>Merci de votre attention !</h2>
-                    <h3>Des questions ?</h3>
+                    <h3>D'autres questions ?</h3>
                     <p>
-                        <small><a href="http://twitter.com/goldoraf">@goldoraf</a></small>
+                        <a href="http://twitter.com/goldoraf">@goldoraf</a>
                     </p>
                 </section>
 
@@ -527,6 +777,7 @@ Polymer('foo-bar', {
 
         <script src="lib/js/head.min.js"></script>
         <script src="js/reveal.js"></script>
+        <script src="plugin/prism/prism.js"></script>
 
         <script>
 
@@ -550,9 +801,11 @@ Polymer('foo-bar', {
                     { src: 'lib/js/classList.js', condition: function() { return !document.body.classList; } },
                     { src: 'plugin/markdown/marked.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
                     { src: 'plugin/markdown/markdown.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
-                    { src: 'plugin/highlight/highlight.js', async: true, callback: function() { hljs.initHighlightingOnLoad(); } },
+                    // { src: 'plugin/highlight/highlight.js', async: true, callback: function() { hljs.initHighlightingOnLoad(); } },
                     { src: 'plugin/zoom-js/zoom.js', async: true, condition: function() { return !!document.body.classList; } },
-                    { src: 'plugin/notes/notes.js', async: true, condition: function() { return !!document.body.classList; } }
+                    { src: 'plugin/notes/notes.js', async: true, condition: function() { return !!document.body.classList; } },
+                    // { src: 'plugin/prism/prism.js', async: true, condition: function() { return !!document.body.classList; } },
+                    { src: 'plugin/tagcloud/tagcloud.js', async: true, condition: function() { return !!document.body.classList; } }
                 ]
             });
 
