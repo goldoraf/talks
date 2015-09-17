@@ -1,0 +1,804 @@
+<!doctype html>
+<html lang="en">
+
+    <head>
+        <meta charset="utf-8">
+
+        <title>Web Components</title>
+
+        <meta name="description" content="Une présentation sur les possibilités des Web Components">
+        <meta name="author" content="Raphaël Rougeron">
+
+        <meta name="apple-mobile-web-app-capable" content="yes" />
+        <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+
+        <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+        <link rel="stylesheet" href="css/reveal.min.css">
+
+        <link rel="stylesheet" href="css/prism.css">
+        <link rel="stylesheet" href="css/custom.css" id="theme">
+
+        <!-- For syntax highlighting -->
+        <!-- <link rel="stylesheet" href="lib/css/zenburn.css"> -->
+
+        <!-- If the query includes 'print-pdf', use the PDF print sheet -->
+        <script>
+            document.write( '<link rel="stylesheet" href="css/print/' + ( window.location.search.match( /print-pdf/gi ) ? 'pdf' : 'paper' ) + '.css" type="text/css" media="print">' );
+        </script>
+
+        <!--[if lt IE 9]>
+        <script src="lib/js/html5shiv.js"></script>
+        <![endif]-->
+    </head>
+
+    <body>
+
+        <div class="reveal">
+
+            <!-- Any section element inside of this container is displayed as a slide -->
+            <div class="slides">
+                <section>
+                    <h1>Web&nbsp;Components</h1>
+                    <h2>Pourquoi, comment,<br>pour qui ?</h2>
+                    <p class="speaker">
+                        Raphaël Rougeron    <a href="http://twitter.com/goldoraf">@goldoraf</a>
+                    </p>
+                    <aside class="notes">
+                    Vous êtes vous déjà demandé pourquoi vous aimez le développement web ? Pour moi une des raisons essentielles est la simplicité (toute relative parfois) du trio HTML+CSS+JS.  
+                    </aside>
+                </section>
+
+                <section tagcloud large bw>
+                    &lt;h1&gt;
+                    &lt;p&gt;
+                    &lt;section&gt;
+                    &lt;div&gt;
+                    &lt;form&gt;
+                    &lt;input&gt;
+                    &lt;span&gt;
+                    &lt;img&gt;
+                    &lt;svg&gt;
+                    &lt;select&gt;
+                    &lt;textarea&gt;
+                    &lt;a&gt;
+                    &lt;li&gt;
+                    &lt;pre&gt;
+                    &lt;canvas&gt;
+                    &lt;footer&gt;
+                    &lt;aside&gt;
+                    &lt;article&gt;
+                    <aside class="notes">
+                    HTML (et CSS) vous permet d'implémenter votre UI de façon déclarative, ce qui est idéal car cela permet de visualiser beaucoup plus facilement le résultat final en regardant le code. Ceux qui parmi vous ont déjà fait de la prog. impérative de GUI (Swing, GTK...) seront sans doute d'accord avec moi.
+                    </aside>
+                </section>
+
+                <section tagcloud>
+                    Onglets
+                    Calendrier
+                    Slider
+                    Accordion
+                    Datepicker
+                    Dropdown
+                    Datagrid
+                    Graphiques
+                    Navigation
+                    Tooltip
+                    Autocomplete
+                    Modal
+                    Overlay
+                    Drag n'drop
+                    Tree
+                    Panels
+                    Notification
+                    <aside class="notes">
+                    Le pb est que le "vocabulaire" HTML nous apparait aujourd'hui limité : nous ne construisons plus seulement des sites web, mais de vraies applications qui demandent toujours plus d'éléments d'UI semblables aux applis desktop. Nous ne parlons plus de h1 ou d'input, mais de Dropdown et autre datagrid. Différentes librairies sont ainsi nées afin de satisfaire les développeurs.
+                    </aside>
+                </section>
+                
+                <section>
+                    <img class="raw" src="images/copier-coller.jpg" />
+                    <aside class="notes">
+                    Certaines, comme Bootstrap, demandent de copier-coller de gros morceux de markup HTML afin d'obtenir la fonction désirée.
+                    </aside>
+                </section>
+
+                <section>
+                    <img class="raw" src="images/modal.png" />
+                    <aside class="notes">
+                    Remarquez que l'avantage déclaratif d'HTML est beaucoup moins visible : difficile de s'imaginer le rendu visuel d'une telle soupe de tags.
+                    </aside>
+                </section>
+
+                <section class="large">
+                    <pre><code class="language-javascript">require(
+    ["dijit/layout/TabContainer", "dijit/layout/ContentPane"], 
+    function(TabContainer, ContentPane){
+        var tc = new TabContainer({
+            style: "height: 100%; width: 100%;"
+        }, "tc1-prog");
+        var cp1 = new ContentPane({
+             title: "Food",
+             content: "We offer amazing food"
+        });
+        tc.addChild(cp1);
+        var cp2 = new ContentPane({
+             title: "Drinks",
+             content: "We are known for our drinks."
+        });
+        tc.addChild(cp2);
+        tc.startup();
+    }
+);
+                    </code></pre>
+                    <aside class="notes">
+                    D'autres, comme Dojo, ont adopté le style impératif : on décrit son interface avec du code, ce qui, encore une fois, est nettement moins parlant.
+                    </aside>
+                </section>
+
+                <section>
+                    <pre><code class="language-javascript">
+var tabs = $("#tabs").tabs({
+    tabTemplate: "...",
+                                
+    add: function(event, ui) {
+        ...
+    }
+});
+        
+tabs.tabs("add", "#project", "foo")
+    .tabs("select", tabs.tabs("length") - 1);
+                    </code></pre>
+                    <aside class="notes">
+                    jQuery, bien qu'impératif dans l'utilisation, s'est efforcé de conserver une API très légère et de se brancher sur du markup existant. Mais cette API est franchement bizarre à utiliser...
+                    </aside>
+                </section>
+
+                <section>
+                    <img class="raw" src="images/jquery_css.png" />
+                    <aside class="notes">
+                    ...sans parler de la difficulté à thémer les composants, la nature en cascade des feuilles de style imposant une grande rigueur dans l'utilisation des classes.
+                    </aside>
+                </section>
+
+                <section>
+                    <img class="raw" src="images/frameworks.png" />
+                    <aside class="notes">
+                    Mais la mode des Single Page Apps et l'arrivée des frameworks JS ont une nouvelle fois changé la donne.
+                    Chacun propose une façon de développer des composants d'UI, et ils ne sont pas interopérables.
+                    </aside>
+                </section>
+
+                <section>
+                    <img class="raw" src="images/macgyver.jpg" />
+                    <pre><code class="language-javascript">
+MyApp.DatepickerComponent = Ember.TextField.extend({
+    didInsertElement: function() {
+        this.$().datepicker();
+    } 
+});
+                    </code></pre>
+                    <aside class="notes">
+                    Bien souvent nous nous sommes contentés d'intégrer des composants d'UI existants, notamment jQuery, à ces frameworks. Cela fonctionne, mais ce n'est pas très élégant. L'abstraction fuit un peu...
+                    </aside>
+                </section>
+
+                <section class="large">
+                    <pre><code class="language-javascript">
+var TabbedArea = React.createClass({
+    handleClick: function(idx, e) {
+        e.preventDefault();
+        this.props.switchTab(idx);
+    },
+    render: function() {
+        return this.transferPropsTo(
+            &lt;div&gt;
+                &lt;ul className="nav nav-pills nav-justified"&gt;
+                    {this.renderTabs()}
+                &lt;/ul&gt;
+                &lt;div className="tab-content"&gt;
+                    {this.renderPanes()}
+                &lt;/div&gt;
+            &lt;/div&gt;
+        );
+    },
+    ...
+});
+                    </code></pre>
+                    <aside class="notes">
+                    Nous avons donc commencé à recoder nos éléments d'UI avec l'aide de ces frameworks, et dans certains cas cela est relativement élégant.
+                    </aside>
+                </section>
+
+                <section>
+                    <img class="raw" src="images/frameworks_hype.png" />
+                    <aside class="notes">
+                    Sans compter que le meilleur framework est toujours le nouveau qui vient de sortir, nous en changeons donc souvent. C'est ce qui nous est arrivé à mon équipe et moi-même...(détails). Résultat, nous avons dû fréquemment recoder nos éléments d'UI afin de s'adapter à un nouvel outil. Il y avait sûrement un meilleur moyen, une façon de créer des briques d'UI réutilisables, quelque soit le framework.
+                    </aside>
+                </section>
+
+                <section>
+                    <img class="raw" src="images/w3c.png" />
+                    <aside class="notes">
+                    Et puis un jour j'ai vu la lumière, ou plutôt une proposition de spec.
+                    </aside>
+                </section>
+
+                <section class="large">
+                    <pre><code class="language-markup">&lt;element name="tick-tock-clock"&gt;
+    &lt;style&gt;
+        :host { display: block; }
+    &lt;/style&gt;
+    &lt;template&gt;
+        &lt;span id="hh"&gt;&lt;/span&gt;
+        &lt;span id="sep"&gt;:&lt;/span&gt;
+        &lt;span id="mm"&gt;&lt;/span&gt;
+    &lt;/template&gt;
+    &lt;script&gt;
+        var tpl = document.currentScript
+                               .parentNode.querySelector('template');
+        ({
+            readyCallback: function () {
+                this._root = this.createShadowRoot();
+                this._root.appendChild(tpl.content.cloneNode(true));
+            }
+        });
+    &lt;/script&gt;
+&lt;/element&gt;
+                    </code></pre>
+                    <aside class="notes">
+                    Ce brouillon (draft) proposait une manière élégante d'étendre le vocabulaire HTML des navigateurs et ainsi de concevoir des éléments d'UI réutilisables et faciles à utiliser. 
+                    </aside>
+                </section>
+
+                <section tagcloud>
+                    &lt;tabs-panel&gt;
+                    &lt;x-calendar&gt;
+                    &lt;input is="slider"&gt;
+                    &lt;b-accordion&gt;
+                    &lt;drop-down&gt;
+                    &lt;data-grid&gt;
+                    &lt;chart-donut&gt;
+                    &lt;nav-bar&gt;
+                    &lt;tether-tooltip&gt;
+                    &lt;input is="autocomplete"&gt;
+                    &lt;x-modal&gt;
+                    &lt;b-overlay&gt;
+                    &lt;core-drag&gt;
+                    &lt;b-tree&gt;
+                    &lt;paper-panel&gt;
+                    &lt;notification-flash&gt;
+                    <aside class="notes">
+                    Nous allions enfin pouvoir profiter à nouveau des bienfaits du déclaratif.
+                    </aside>
+                </section>
+
+                <section>
+                    <img class="raw" src="images/webcomponents.png" />
+                    <aside class="notes">
+                    Cette introduction a depuis été mise en sommeil, mais les technologies sous-jacentes sont restées et sont comme vous le savez en cours de discussion, stabilisation et même implémentation pour certaines. Ces spécifications apportent une réponse à tous les problèmes dont nous venons de discuter : retour au déclaratif, difficulté de thémer, etc...
+                    </aside>
+                </section>
+
+                <section data-background="#c92c2c">
+                    <h2>Custom Elements</h2>
+                </section>
+
+                <section>
+                    <section>
+                        <h2>Custom Elements</h2>
+                        <h4>Définir de nouveaux éléments HTML</h4>
+                        <h6>&lt;hello-world&gt;&lt;/hello-world&gt;</h6>
+                        <pre><code class="language-javascript">            
+    var HelloWorldPrototype = Object.create(HTMLElement.prototype);
+    HelloWorldPrototype.createdCallback = function() {
+      this.textContent = "Hello world!";
+    };
+
+    var HelloWorld = document.registerElement('hello-world', {
+      prototype: HelloWorldPrototype
+    });
+                        </code></pre>
+                        <aside class="notes">
+                            Les CEs permettent aux développeurs de créer leurs propres éléments HTML, en associant du code JS à un nom de tag. Les éléments ainsi créés peuvent être manipulés de la même façon qu'un élément standard. Le prototype fourni à registerElement peut contenir des lifecycles callbacks ; toute autre méthode/prop ajoutée au proto fera partie de l'API du nouvel élément.
+                        </aside>
+                    </section>
+
+                    <section>
+                        <h2>Custom Elements</h2>
+                        <h4>Lifecycle callbacks</h4>
+                        <ul>
+                            <li>createdCallback</li>
+                            <li>attachedCallback</li>
+                            <li>detachedCallback</li>
+                            <li>attributeChangedCallback</li>
+                        </ul>
+                    </section>
+
+                    <section>
+                        <h2>Custom Elements</h2>
+                        <h4>Etendre des éléments existants</h4>
+                        <h6>&lt;button is="super-button"&gt;&lt;/button&gt;</h6>
+                        <pre><code class="language-javascript">
+    document.registerElement('super-button', {
+        prototype: SuperButtonPrototype,
+        extends: 'button'
+    });
+                        </code></pre>
+                    </section>
+                </section>
+
+                <section data-background="#358ccb">
+                    <h2>HTML Templates</h2>
+                </section>
+
+                <section>
+                    <h2>HTML Templates</h2>
+                    <pre><code class="language-markup">
+&lt;template id="comment-tpl"&gt;
+    &lt;div&gt;
+        &lt;img src=""&gt;
+        &lt;div class="comment-text"&gt;&lt;/div&gt;
+    &lt;/div&gt;
+&lt;/template&gt;
+                    </code></pre>
+                    <pre><code class="language-javascript">
+var tpl = document.querySelector("#comment-tpl");
+document.body.appendChild(tpl.content.cloneNode(true));
+                    </code></pre>
+                    <aside class="notes">
+                        Le contenu d'un template est parsé, mais reste "inerte" : les images ne sont pas chargées par ex. La prop. content d'un template est +/- comparable à un document fragment.
+                    </aside>
+                </section>
+
+                <section data-background="#2f9c0a">
+                    <h2>Shadow DOM</h2>
+                </section>
+
+                <section>
+                    <section>
+                        <h2>Shadow DOM</h2>
+                        <h4>Composition & encapsulation DOM/CSS</h4>
+                        <pre><code class="language-markup">
+    &lt;template id="modal-tpl"&gt;
+        &lt;div class="modal"&gt;
+            &lt;content&gt;&lt;/content&gt;
+            &lt;button&gt;Close&lt;/button&gt;
+        &lt;/div&gt;
+    &lt;/template&gt;
+                        </code></pre>
+                        <pre><code class="language-javascript">
+    var root = this.createShadowRoot(),
+        tpl = document.querySelector("#modal-tpl");
+
+    root.appendChild(tpl.content.cloneNode(true));
+                        </code></pre>
+                        <aside class="notes">
+                            Shadow DOM is an adjunct tree of DOM nodes. These shadow DOM subtrees can be associated with an element, but do not appear as child nodes of the element. Instead the subtrees form their own scope. For example, a shadow DOM subtree can contain IDs and styles that overlap with IDs and styles in the document, but because the shadow DOM subtree (unlike the child node list) is separate from the document, the IDs and styles in the shadow DOM subtree do not clash with those in the document.
+                        </aside>
+                    </section>
+
+                    <section>
+                        <h2>Shadow DOM</h2>
+                        <h4>Composition</h4>
+                        <table style="width: 100%;">
+                            <tr>
+                                <td>
+                                   <pre>
+                                        <code class="language-markup">&lt;div class="modal"&gt;</code><code class="language-markup highlight-line">    &lt;content&gt;&lt;/content&gt;</code><code class="language-markup">    &lt;button&gt;Close&lt;/button&gt;
+    &lt;/div&gt;
+                                    </code><span class="code-annotation">Shadow DOM</span></pre>
+                                </td>
+                                <td rowspan="2" style="vertical-align: middle;">
+                                    <pre><code class="language-markup">
+    &lt;div class="modal"&gt;
+        &lt;h3&gt;My title&lt;/h3&gt;
+        &lt;p&gt;Lorem ipsum&lt;/p&gt;
+        &lt;button&gt;Close&lt;/button&gt;
+    &lt;/div&gt;
+                                    </code><span class="code-annotation">Composed DOM</span></pre>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <pre>
+                                        <code class="language-markup">&lt;x-modal&gt;</code><code class="language-markup highlight-line">    &lt;h3&gt;My title&lt;/h3&gt;
+        &lt;p&gt;Lorem ipsum&lt;/p&gt;</code><code class="language-markup">&lt;/x-modal&gt;
+        </code><span class="code-annotation">Light DOM</span></pre>
+                                </td>
+                            </tr>
+                        </table>
+                        
+                    </section>
+
+                    <section>
+                        <h2>Shadow DOM</h2>
+                        <h4>Insertion points</h4>
+                        <table style="width: 100%;">
+                            <tr>
+                                <td>
+                                   <pre>
+                                        <code class="language-markup">&lt;div class="modal"&gt;
+      &lt;div class="modal-title"&gt;</code><code class="language-markup highlight-line">    &lt;content select="h3"&gt;...&lt;/content&gt;</code><code class="language-markup">  &lt;/div&gt;</code><code class="language-markup highlight-line2">    &lt;content&gt;&lt;/content&gt;</code><code class="language-markup">    &lt;button&gt;Close&lt;/button&gt;
+    &lt;/div&gt;
+                                    </code><span class="code-annotation">Shadow DOM</span></pre>
+                                </td>
+                                <td rowspan="2" style="vertical-align: middle;">
+                                    <pre><code class="language-markup">
+    &lt;div class="modal"&gt;
+        &lt;div class="modal-title"&gt;
+            My title
+        &lt;/div&gt;
+        &lt;p&gt;Lorem ipsum&lt;/p&gt;
+        &lt;button&gt;Close&lt;/button&gt;
+    &lt;/div&gt;
+                                    </code><span class="code-annotation">Composed DOM</span></pre>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <pre>
+                                        <code class="language-markup">&lt;x-modal&gt;</code><code class="language-markup highlight-line">    &lt;h3&gt;My title&lt;/h3&gt;</code><code class="language-markup highlight-line2">    &lt;p&gt;Lorem ipsum&lt;/p&gt;</code><code class="language-markup">&lt;/x-modal&gt;
+        </code><span class="code-annotation">Light DOM</span></pre>
+                                </td>
+                            </tr>
+                        </table>
+                    </section>
+
+                    <section>
+                        <h2>Shadow DOM</h2>
+                        <h4>Multiple subtrees</h4>
+                        <table style="width: 100%;">
+                            <tr>
+                                <td>
+                                   <pre>
+                                        <code class="language-markup">&lt;template id="super-button-tpl"&gt;
+        &lt;div class="super-button"&gt;
+            &lt;button&gt;</code><code class="language-markup highlight-line">            &lt;content&gt;&lt;/content&gt;</code><code class="language-markup">        &lt;/button&gt;
+        &lt;/div&gt;
+    &lt;/template&gt;</code><span class="code-annotation">Shadow DOM 1</span></pre>
+                                </td>
+                                <td rowspan="2" style="vertical-align: middle;">
+                                    <pre><code class="language-markup">
+    &lt;button is="super-duper-button"&gt;
+        Submit
+    &lt;/button&gt;
+                                    </code><span class="code-annotation">Light DOM</span></pre>
+                                    <pre><code class="language-markup">
+    &lt;div class="super-duper-button"&gt;
+        &lt;div class="super-button"&gt;
+            &lt;button&gt;Submit&lt;/button&gt;
+        &lt;/div&gt;
+    &lt;/div&gt;
+                                    </code><span class="code-annotation">Composed DOM</span></pre>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <pre>
+                                        <code class="language-markup">&lt;template id="super-duper-button-tpl"&gt;
+        &lt;div class="super-duper-button"&gt;</code><code class="language-markup highlight-line">        &lt;shadow&gt;&lt;/shadow&gt;</code><code class="language-markup">    &lt;/div&gt;
+    &lt;/template&gt;</code><span class="code-annotation">Shadow DOM 2</span></pre>
+                                </td>
+                            </tr>
+                        </table>
+                    </section>
+
+                    <section>
+                        <h2>Shadow DOM</h2>
+                        <h4>Shadow CSS</h4>
+                        <pre><code class="language-css">
+    :host {
+        border: 1px solid #ccc;
+    }
+    :host(.flashy) {
+        border: 1px solid red;
+    }
+    :host-context(.warning) {
+        background-color: red;
+    }
+    ::content div {
+        color: red;
+    }
+                        </code></pre>
+                    </section>
+
+                    <section>
+                        <h2>Shadow DOM</h2>
+                        <h4>From outside</h4>
+                        <pre><code class="language-css">
+    x-foo::shadow p {
+        color: red;
+    }
+    x-tabs::shadow x-panel::shadow h2 {
+        color: red;
+    }
+    x-tabs /deep/ h2 {
+        color: red;
+    }
+                        </code></pre>
+                    </section>
+                </section>
+
+                <section data-background="#a67f59">
+                    <h2>HTML imports</h2>
+                </section>
+
+                <section>
+                    <h2>HTML imports</h2>
+                    <h4>Charger ses web components</h4>
+                    <pre><code class="language-markup">
+&lt;link rel="import" href="my-component.html"&gt;
+                    </code></pre>
+                </section>
+
+                <section>
+                    <h2>On mélange le tout...</h2>
+                    <h4>Vanilla JS Web Component</h4>
+                </section>
+
+                <section class="large">
+                    <pre><code class="language-markup">
+&lt;template&gt;
+    &lt;style&gt;
+        :host { color: red; }
+    &lt;/style&gt;
+    &lt;div&gt;&lt;/div&gt;
+&lt;/template&gt;
+&lt;script&gt;
+    var tpl = document.currentScript
+                      .parentNode.querySelector('template');
+    var HelloWorldPrototype = Object.create(HTMLElement.prototype);
+    HelloWorldPrototype.createdCallback = function() {
+      this.createShadowRoot();
+      this.shadowRoot.appendChild(document.importNode(tpl, true));
+    };
+    HelloWorldPrototype.say = function() {
+      this.shadowRoot.querySelector('div').textContent = 'Hello';
+    };
+
+    var HelloWorld = document.registerElement('hello-world', {
+      prototype: HelloWorldPrototype
+    });
+&lt;/script&gt;
+                    </code></pre>
+                </section>
+
+                <section>
+                    <h2>Can I use this now ?</h2>
+                    <h3><span style="text-decoration: line-through">No</span>. Yes. With polyfills.</h3>
+                    <table class="browser-compat">
+                        <thead>
+                            <tr>
+                                <th/>
+                                <td><img src="images/firefox.png" /></td>
+                                <td><img src="images/chrome.png" /></td>
+                                <td><img src="images/ie.png" /></td>
+                                <td><img src="images/safari.png" /></td>
+                                <td><img src="images/opera.png" /></td>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <th>Custom Elements</th>
+                                <td></td>
+                                <td class="supported">33</td>
+                                <td></td>
+                                <td></td>
+                                <td class="supported">24</td>
+                            </tr>
+                            <tr>
+                                <th>HTML Templates</th>
+                                <td class="supported">31</td>
+                                <td class="supported">31</td>
+                                <td></td>
+                                <td></td>
+                                <td class="supported">24</td>
+                            </tr>
+                            <tr>
+                                <th>Shadow DOM</th>
+                                <td></td>
+                                <td class="supported">35*</td>
+                                <td></td>
+                                <td></td>
+                                <td class="supported">24</td>
+                            </tr>
+                            <tr>
+                                <th>HTML imports</th>
+                                <td></td>
+                                <td class="supported">36</td>
+                                <td></td>
+                                <td></td>
+                                <td class="supported">24</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </section>
+
+                <section data-background="#c92c2c">
+                    <h2>Librairies</h2>
+                    <aside class="notes">
+                    Comme je vous le disais tout à l'heure, j'étais convaincu que les WCs étaient LA bonne solution. J'ai donc commencé à investiguer avec ma team les 2 options existantes pour simplifier le dev.
+                    </aside>
+                </section>
+
+                <section class="large">
+                    <h2>X-tag</h2>
+                    <h4>Mozilla</h4>
+                    <pre><code class="language-javascript">
+xtag.register('x-foobar', {
+  extends: 'div',
+  lifecycle:{
+    created: function(){...}
+  },
+  events: {
+    'click:delegate(x-toggler)': function(){...}
+  },
+  accessors: {
+    'togglers': {
+      get: function(){...},
+      set: function(value){...}
+    }
+  },
+  methods: {
+    nextToggler: function(){...}
+  }
+});
+                    </code></pre>
+                    <aside class="notes">
+                    x-tag n'utilise que les Custom Elements. La conséquence est que cela devient rapidement assez verbeux de construire son markup. Nous l'avons essayé sur une appli, mais nous n'avons pas été convaincu.
+                    </aside>
+                </section>
+
+                <section>
+                    <h2>Polymer</h2>
+                    <h4>Sucre syntaxique</h4>
+                    <img style="border: none; box-shadow: none;" src="images/polymer.svg">
+                    <aside class="notes">
+                    L'équipe Polymer a choisi d'utiliser toutes les specs, et en a implémenté les polyfills. Ils ont par ailleurs ajouté pas mal de sucre syntaxique et de features comme le 2-way binding.
+                    </aside>
+                </section>
+
+                <section class="large">
+                    <h2>Polymer</h2>
+                    <pre><code class="language-markup">
+&lt;polymer-element name="foo-bar"&gt;
+  &lt;template&gt;
+    &lt;span&gt;This is {{owner}}'s foo-bar&lt;/span&gt;
+    &lt;input type="text" value="{{owner}}"&gt;
+  &lt;/template&gt;
+  &lt;script&gt;
+    Polymer('foo-bar', {
+      owner: 'Raphaël',
+      
+      ready: function() {...},
+
+      ownerChanged: function() {...},
+      
+      get greeting() {...}, 
+      foo: function() {...}
+    });
+  &lt;/script&gt;
+&lt;/polymer-element&gt;
+                    </code></pre>
+                    <aside class="notes">
+                    Au moment où nous l'avons évalué, Polymer était assez lourd (cela a fait bcp de progrès depuis) : le polyfill pour Shadow DOM notamment était très violent car surchargeait un bon nombre de méthodes du DOM (depuis ils ont fait shady.js). De plus ils ne supportaient pas IE9 (nous en avions besoin) et leurs éléments ne correspondaient pas trop à nos besoins.
+                    </aside>
+                </section>
+
+                <section>
+                    <h2>Bosonic</h2>
+                    <img style="border: none; box-shadow: none;" src="images/bosonic.png">
+                    <p><a href="http://bosonic.github.io">bosonic.github.io</a></p>
+                    <aside class="notes">
+                    Du coup j'ai décidé de partir sur ma propre solution, Bosonic. Mon intention était de proposer une librairie à mi-chemin entre x-tags et Polymer d'un point de vue fonctionnel. Ni trop de features, ni pas assez. Et de proposer des éléments plus adapté au développeur de tous les jours, surtout les "entreprisey"
+                    </aside>
+                </section>
+
+                <section>
+                    <h2>Bosonic</h2>
+                    <h4>Transformation de code</h4>
+                    <img style="border: none; box-shadow: none;" src="images/bosonic_howitworks.png">
+                    <aside class="notes">
+                    J'aimais tellement la syntaxe de la spec originale que j'ai voulu l'implémenter dans Bosonic. Et comme cela nécessitait de transformer le code, j'ai implémenté une forme de transpiler.
+                    </aside>
+                </section>
+
+                <section class="large">
+                    <h2>Bosonic</h2>
+                    <pre><code class="language-markup">
+&lt;element name="b-hello-world"&gt;
+    &lt;style&gt;
+        :host {
+            color: red;
+        }
+    &lt;/style&gt;
+    &lt;template&gt;
+        &lt;p&gt;Hello world!&lt;/p&gt;
+    &lt;/template&gt;
+    &lt;script&gt;
+        ({
+            readyCallback: function() {
+                var root = this.createShadowRoot();
+                root.appendChild(this.template.content.cloneNode(true));
+            }
+        });
+    &lt;/script&gt;
+&lt;/element&gt;
+                    </code></pre>
+                </section>
+
+                <section data-background="#c92c2c">
+                    <h2>Peur, incertitude et doutes</h2>
+                    <aside class="notes">
+                    Il reste un (gros) pb : les développeurs n'ont pas suivi, que ce soit Bosonic ou dans une moindre mesure Polymer. Et ils ont mis du temps à exprimer leurs griefs.
+                    </aside>
+                </section>
+
+                <section>
+                    <h3>Un développeur à qui on présente les Web Components</h3>
+                    <img style="border: none; box-shadow: none;" src="images/meh.jpg">
+                    <aside class="notes">
+                    Le point essentiel est que bien souvent ils jugent que les WCs ne sont pas le bon paradigme pour développer des applis. Et dans le même temps la popularité de React ne fait qu'augmenter. J'ai fini par réaliser mon (notre) erreur : il ne faut pas présenter Polymer, Bosonic ou x-tags comme un moyen de développer ses propres éléments. Le dev n'a pas le temps ni l'envie de se prendre la tête avec le DOM. C'est un peu triste, mais c'est comme ça. 
+                    </aside>
+                </section>
+
+                <section>
+                    <h2>Bosonic 1.0, le retour</h2>
+                    <img style="border: none; box-shadow: none;" src="images/bosonic2.png">
+                    <p><a href="http://bosonic.github.io">bosonic.github.io</a></p>
+                    <aside class="notes">
+                    Du coup j'ai décidé de réorienter Bosonic : fini la transpilation (pour l'instant), on utilise les polyfills existants et on se concentre sur ce que veulent les devs, c.a.d des éléments d'UI pratiques, du type de ceux qu'on utilise tous les jours (Bootstrap), avec en projet des éléments plus avancés (datagrid).
+                    </aside>
+                </section>
+
+                <section>
+                    <h2>Merci de votre attention !</h2>
+                    <p>
+                        <a href="http://twitter.com/goldoraf">@goldoraf</a>
+                    </p>
+                    <p><a href="http://bosonic.github.io">bosonic.github.io</a></p>
+                </section>
+
+            </div>
+
+        </div>
+
+        <script src="lib/js/head.min.js"></script>
+        <script src="js/reveal.js"></script>
+        <script src="plugin/prism/prism.js"></script>
+
+        <script>
+
+            // Full list of configuration options available here:
+            // https://github.com/hakimel/reveal.js#configuration
+            Reveal.initialize({
+                controls: true,
+                progress: true,
+                history: true,
+                center: true,
+
+                theme: Reveal.getQueryHash().theme, // available themes are in /css/theme
+                transition: Reveal.getQueryHash().transition || 'default', // default/cube/page/concave/zoom/linear/fade/none
+
+                // Parallax scrolling
+                // parallaxBackgroundImage: 'https://s3.amazonaws.com/hakim-static/reveal-js/reveal-parallax-1.jpg',
+                // parallaxBackgroundSize: '2100px 900px',
+
+                // Optional libraries used to extend on reveal.js
+                dependencies: [
+                    { src: 'lib/js/classList.js', condition: function() { return !document.body.classList; } },
+                    { src: 'plugin/markdown/marked.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+                    { src: 'plugin/markdown/markdown.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+                    // { src: 'plugin/highlight/highlight.js', async: true, callback: function() { hljs.initHighlightingOnLoad(); } },
+                    { src: 'plugin/zoom-js/zoom.js', async: true, condition: function() { return !!document.body.classList; } },
+                    { src: 'plugin/notes/notes.js', async: true, condition: function() { return !!document.body.classList; } },
+                    // { src: 'plugin/prism/prism.js', async: true, condition: function() { return !!document.body.classList; } },
+                    { src: 'plugin/tagcloud/tagcloud.js', async: true, condition: function() { return !!document.body.classList; } }
+                ]
+            });
+
+        </script>
+
+    </body>
+</html>
