@@ -21,6 +21,8 @@
 
         <link rel="stylesheet" href="css/custom.css">
 
+        
+
         <!-- If the query includes 'print-pdf', use the PDF print sheet -->
         <script>
             document.write( '<link rel="stylesheet" href="css/print/' + ( window.location.search.match( /print-pdf/gi ) ? 'pdf' : 'paper' ) + '.css" type="text/css" media="print">' );
@@ -370,6 +372,95 @@ assert.lengthOf(tea.flavors, 3);
                 </section>
 
                 <section>
+                        <h3>mocha + chai + sinon</h3>
+                        <h2>ou bien...</h2>
+                        <h2>Jest</h2>
+                </section>
+
+                <section>
+                    <h2>Jest - Snapshot Testing</h2>
+                    <h3>React / React Native</h3>
+                    <pre><code class="hljs" contenteditable>
+import renderer from 'react-test-renderer';
+test('Link renders correctly', () => {
+  const tree = renderer.create(
+    &lt;Link page="http://www.facebook.com"&gt;Facebook&lt;/Link&gt;
+  ).toJSON();
+  expect(tree).toMatchSnapshot();
+});
+                        </code></pre>
+                        <pre><code class="hljs javascript" contenteditable>
+exports[`Link renders correctly 1`] = `
+&lt;a
+  className="normal"
+  href="http://www.facebook.com"
+  onMouseEnter={[Function]}
+  onMouseLeave={[Function]}>
+  Facebook
+&lt;/a>
+`;
+                        </code></pre>
+                </section>
+
+                <section>
+                    <h2>Jest - Snapshot Testing</h2>
+                    <h3>React / React Native</h3>
+                    <pre><code class="hljs javascript" contenteditable>
+test('Link changes the class when hovered', () => {
+  const component = renderer.create(
+    &lt;Link page="http://www.facebook.com"&gt;Facebook&lt;/Link&gt;
+  );
+  let tree = component.toJSON();
+  expect(tree).toMatchSnapshot();
+
+  // manually trigger the callback
+  tree.props.onMouseEnter();
+  // re-rendering
+  tree = component.toJSON();
+  expect(tree).toMatchSnapshot();
+});
+                        </code></pre>
+                </section>
+
+                <section>
+                    <h2>Enzyme</h2>
+                    <h3>React</h3>
+                    <pre><code class="hljs javascript" contenteditable>
+describe('&lt;MyComponent />', () => {
+  it('renders three &lt;Foo /> components', () => {
+    const wrapper = shallow(&lt;MyComponent /&gt;);
+    expect(wrapper.find(Foo)).to.have.length(3);
+  });
+
+  it('simulates click events', () => {
+    const onButtonClick = sinon.spy();
+    const wrapper = shallow(
+      &lt;Foo onButtonClick={onButtonClick} /&gt;
+    );
+    wrapper.find('button').simulate('click');
+    expect(onButtonClick).to.have.property('callCount', 1);
+  });
+});
+                        </code></pre>
+                </section>
+
+                <section>
+                    <h2>Enzyme + Karma</h2>
+                    <h3>Cross-browser testing</h3>
+                    <pre style="font-size: 0.5em"><code contenteditable>
+raphael@eagle:~/Code/syrahjs$ karma start syrah.conf.js 
+INFO [karma]: Karma server started at http://localhost:9876/
+INFO [launcher]: Starting browser Firefox
+INFO [launcher]: Starting browser Chrome
+INFO [Chrome 24.0 (Linux)]: Connected on socket id O6e8d00_L-soVDkx_e4G
+INFO [Firefox 19.0 (Linux)]: Connected on socket id jmBng24HVrIC8xBX_e4H
+Chrome 24.0 (Linux): Executed 58 of 58 SUCCESS (3.189 secs / 2.986 secs)
+Firefox 19.0 (Linux): Executed 58 of 58 SUCCESS (3.288 secs / 3.039 secs)
+TOTAL: 116 SUCCESS
+                    </code></pre>
+                </section>
+                    
+                <section>
                     <h2>UI testing</h2>
                     <h3>Declencher des events d'UI</h3>
                     <pre><code class="javascript" contenteditable>
@@ -425,47 +516,7 @@ function simulateKeyAction(selector, action, chromeCode, ffCode, shiftKeyArg) {
                 </section>
 
                 <section>
-                    <h2>Cross-browser testing</h2>
-                    <ul>
-                        <li>JsTestDriver</li>
-                        <li>Testem</li>
-                        <li><del>Testacular</del> Karma</li>
-                    </ul>
-                </section>
-
-                <section>
-                    <h2>Karma</h2>
-                    <pre style="font-size: 0.5em"><code contenteditable>
-raphael@eagle:~/Code/syrahjs$ karma start syrah.conf.js 
-INFO [karma]: Karma server started at http://localhost:9876/
-INFO [launcher]: Starting browser Firefox
-INFO [launcher]: Starting browser Chrome
-INFO [Chrome 24.0 (Linux)]: Connected on socket id O6e8d00_L-soVDkx_e4G
-INFO [Firefox 19.0 (Linux)]: Connected on socket id jmBng24HVrIC8xBX_e4H
-Chrome 24.0 (Linux): Executed 58 of 58 SUCCESS (3.189 secs / 2.986 secs)
-Firefox 19.0 (Linux): Executed 58 of 58 SUCCESS (3.288 secs / 3.039 secs)
-TOTAL: 116 SUCCESS
-                    </code></pre>
-                </section>
-                    
-                <section>
-                    <h2>Si vous utilisez un framework</h2>
-                    <ul>
-                        <li>Ne testez pas votre framework !</li>
-                        <li>Unit-testez vos propres libs</li>
-                        <li>Unit-testez l'intégration avec des libs "3rd-party"</li>
-                        <li>Ecrivez des tests d'intégration</li>
-                    </ul>
-                </section>
-
-                <section>
                     <h2>Tests d'intégration</h2>
-                    <ul>
-                        <li>Selenium / WebDriver</li>
-                        <li>Windmill</li>
-                        <li>PhantomJS</li>
-                        <li><strong>CasperJS</strong></li>
-                    </ul>
                 </section>
 
                 <section>
@@ -488,6 +539,44 @@ casper.run(function() {
     this.test.renderResults(true, 0, 'test-result/tweets.xml');
 });
                     </code></pre>
+                </section>
+
+                <section>
+                    <h2>Webdriver.IO</h2>
+                    <pre class="small"><code class="full javascript" contenteditable>
+describe('webdriver.io page', function() {
+    it('should have the right title - the fancy generator way', function () {
+        browser.url('http://webdriver.io');
+        var title = browser.getTitle();
+        assert.equal(title, 'WebdriverIO - Selenium 2.0 javascript bindings for nodejs');
+    });
+});
+                    </code></pre>
+                </section>
+
+                <section>
+                    <h2>WebdriverCSS</h2>
+                    <h3>CSS regression testing</h3>
+                    <pre class="small"><code class="full javascript" contenteditable>
+client
+    .url('http://tumblr.com/themes')
+    .webdrivercss('tumblrpage', {
+        name: 'startpage',
+        exclude: ['#theme_garden > div > section.carousel > div.carousel_slides',
+                 '//*[@id="theme_garden"]/div/section[3]',
+                 '//*[@id="theme_garden"]/div/section[4]']
+        screenWidth: [1200]
+    }, function(err, res) {
+        assert.ifError(err);
+        assert.ok(res.isWithinMisMatchTolerance);
+    });
+                    </code></pre>
+                </section>
+
+                <section>
+                    <h2>WebdriverCSS</h2>
+                    <h3>CSS regression testing</h3>
+                    <img src="https://camo.githubusercontent.com/d9f20f37cc24bed58a20c639d8ff48d1c6b9f5d2/687474703a2f2f7765626472697665722e696f2f696d616765732f7765626472697665726373732f6578636c7564652e706e67"/>
                 </section>
 
                 <section>
